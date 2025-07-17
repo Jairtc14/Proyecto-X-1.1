@@ -3,97 +3,77 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Consulta tus Números</title>
+  <title>Mis Números</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
-      background: #f5f5f5;
+      background: #f0f0f0;
     }
-
-    h2 {
-      color: #333;
+    .contenedor {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: 50px auto;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-
-    form {
-      margin-bottom: 20px;
-    }
-
-    input[type="email"] {
+    input, button {
+      margin-top: 15px;
       padding: 10px;
       font-size: 16px;
-      width: 280px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      width: 100%;
     }
-
-    button {
-      padding: 10px 15px;
-      font-size: 16px;
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
-
     #resultado {
-      background: #fff;
-      border-radius: 8px;
-      padding: 15px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
-
-    #resultado p {
-      margin: 5px 0;
+      margin-top: 20px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h2>Consulta tus números</h2>
-  <form id="formConsulta">
-    <input type="email" id="correoInput" placeholder="Ingresa tu correo" required />
-    <button type="submit">Consultar</button>
-  </form>
-
-  <div id="resultado"></div>
+  <div class="contenedor">
+    <h2>Consulta tus números</h2>
+    <input type="email" id="correo" placeholder="Ingresa tu correo">
+    <button onclick="consultarNumeros()">Ver mis números</button>
+    <div id="resultado"></div>
+  </div>
 
   <script>
-    document.getElementById("formConsulta").addEventListener("submit", async function(e) {
-      e.preventDefault();
-      const correo = document.getElementById("correoInput").value.trim();
+    async function consultarNumeros() {
+      const correo = document.getElementById("correo").value.trim();
       const resultado = document.getElementById("resultado");
-      resultado.innerHTML = "Consultando...";
+
+      if (!correo) {
+        resultado.textContent = "Por favor ingresa tu correo.";
+        resultado.style.color = "red";
+        return;
+      }
 
       try {
         const res = await fetch(`https://backend-proyecto-x.onrender.com/consultar-por-correo/${correo}`);
-        if (!res.ok) throw new Error("Correo no encontrado");
+        if (!res.ok) throw new Error("No se pudo consultar");
 
         const data = await res.json();
 
-        if (data.length === 0) {
-          resultado.innerHTML = "❌ No se encontraron números con ese correo.";
-          return;
+        if (data && data.length > 0) {
+          let html = "<h3>🎉 Tus números:</h3><ul>";
+          data.forEach(item => {
+            html += `<li><strong>Código:</strong> ${item.codigo} — <strong>Números:</strong> ${item.numeros.join(", ")}</li>`;
+          });
+          html += "</ul>";
+          resultado.innerHTML = html;
+          resultado.style.color = "black";
+        } else {
+          resultado.textContent = "❌ Correo no encontrado.";
+          resultado.style.color = "red";
         }
-
-        resultado.innerHTML = `<h3>🎟️ Resultados para: <em>${correo}</em></h3>`;
-
-        data.forEach(pedido => {
-          resultado.innerHTML += `
-            <p><strong>Código:</strong> ${pedido.codigo}</p>
-            <p><strong>Números:</strong> ${pedido.numeros.join(", ")}</p>
-            <p><strong>Confirmado:</strong> ${pedido.confirmado ? "Sí" : "No"}</p>
-            <hr />
-          `;
-        });
-      } catch (err) {
-        resultado.innerHTML = "❌ Correo no encontrado o error al consultar.";
+      } catch (error) {
+        console.error(error);
+        resultado.textContent = "❌ Error al consultar.";
+        resultado.style.color = "red";
       }
-    });
+    }
   </script>
 </body>
 </html>
