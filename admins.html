@@ -131,6 +131,13 @@
 
     if (cantidad === null) return;
 
+// Validación de correo válido:
+  const correoValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
+  if (!correoValido) {
+    alert("❌ Por favor ingresa un correo válido.");
+    return;
+  }
+    
     try {
       const res = await fetch(`${backendURL}/guardar-codigo`, {
         method: "POST",
