@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Consulta tus Números</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    input[type="email"] {
+      padding: 10px;
+      font-size: 16px;
+      width: 280px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #resultado {
+      background: #fff;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    #resultado p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <h2>Consulta tus números</h2>
+  <form id="formConsulta">
+    <input type="email" id="correoInput" placeholder="Ingresa tu correo" required />
+    <button type="submit">Consultar</button>
+  </form>
+
+  <div id="resultado"></div>
+
+  <script>
+    document.getElementById("formConsulta").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const correo = document.getElementById("correoInput").value.trim();
+      const resultado = document.getElementById("resultado");
+      resultado.innerHTML = "Consultando...";
+
+      try {
+        const res = await fetch(`https://backend-proyecto-x.onrender.com/consultar-por-correo/${correo}`);
+        if (!res.ok) throw new Error("Correo no encontrado");
+
+        const data = await res.json();
+
+        if (data.length === 0) {
+          resultado.innerHTML = "❌ No se encontraron números con ese correo.";
+          return;
+        }
+
+        resultado.innerHTML = `<h3>🎟️ Resultados para: <em>${correo}</em></h3>`;
+
+        data.forEach(pedido => {
+          resultado.innerHTML += `
+            <p><strong>Código:</strong> ${pedido.codigo}</p>
+            <p><strong>Números:</strong> ${pedido.numeros.join(", ")}</p>
+            <p><strong>Confirmado:</strong> ${pedido.confirmado ? "Sí" : "No"}</p>
+            <hr />
+          `;
+        });
+      } catch (err) {
+        resultado.innerHTML = "❌ Correo no encontrado o error al consultar.";
+      }
+    });
+  </script>
+</body>
+</html>
