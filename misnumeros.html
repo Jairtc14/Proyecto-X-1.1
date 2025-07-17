@@ -1,77 +1,117 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mis Números</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Consultar mis números</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f0f0f0;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f3f4f6;
+      color: #333;
     }
-    .contenedor {
-      background: white;
+
+    header {
+      background: #4caf50;
+      color: white;
       padding: 20px;
-      border-radius: 10px;
-      max-width: 400px;
-      margin: 50px auto;
       text-align: center;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      font-size: 24px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    input, button {
-      margin-top: 15px;
-      padding: 10px;
-      font-size: 16px;
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    input[type="email"] {
       width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
     }
-    #resultado {
-      margin-top: 20px;
-      font-weight: bold;
+
+    button {
+      width: 100%;
+      padding: 15px;
+      font-size: 16px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.3s;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      background: #43a047;
+    }
+
+    .resultado {
+      margin-top: 30px;
+    }
+
+    .codigo-box {
+      background: #f9f9f9;
+      border-left: 5px solid #4caf50;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+    }
+
+    .codigo-box strong {
+      color: #4caf50;
     }
   </style>
 </head>
 <body>
-  <div class="contenedor">
-    <h2>Consulta tus números</h2>
-    <input type="email" id="correo" placeholder="Ingresa tu correo">
-    <button onclick="consultarNumeros()">Ver mis números</button>
-    <div id="resultado"></div>
+  <header>🔍 Consultar mis números</header>
+
+  <div class="container">
+    <input type="email" id="correo" placeholder="Ingresa tu correo" required>
+    <button onclick="consultarNumeros()">Consultar</button>
+
+    <div class="resultado" id="resultado"></div>
   </div>
 
   <script>
     async function consultarNumeros() {
-      const correo = document.getElementById("correo").value.trim();
-      const resultado = document.getElementById("resultado");
+      const correo = document.getElementById('correo').value.trim();
+      const resultado = document.getElementById('resultado');
+      resultado.innerHTML = '';
 
-      if (!correo) {
-        resultado.textContent = "Por favor ingresa tu correo.";
-        resultado.style.color = "red";
-        return;
+      if (!correo || !correo.includes('@')) {
+        return resultado.innerHTML = '<p style="color:red;">Correo inválido</p>';
       }
 
       try {
         const res = await fetch(`https://backend-proyecto-x.onrender.com/consultar-por-correo/${correo}`);
-        if (!res.ok) throw new Error("No se pudo consultar");
+        if (!res.ok) throw new Error("No se encontraron datos");
 
         const data = await res.json();
 
-        if (data && data.length > 0) {
-          let html = "<h3>🎉 Tus números:</h3><ul>";
-          data.forEach(item => {
-            html += `<li><strong>Código:</strong> ${item.codigo} — <strong>Números:</strong> ${item.numeros.join(", ")}</li>`;
-          });
-          html += "</ul>";
-          resultado.innerHTML = html;
-          resultado.style.color = "black";
+        if (data.length === 0) {
+          resultado.innerHTML = '<p>No se encontraron códigos registrados.</p>';
         } else {
-          resultado.textContent = "❌ Correo no encontrado.";
-          resultado.style.color = "red";
+          data.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'codigo-box';
+            div.innerHTML = `<strong>Código:</strong> ${item.codigo}<br><strong>Números:</strong> ${item.numeros.join(', ')}`;
+            resultado.appendChild(div);
+          });
         }
-      } catch (error) {
-        console.error(error);
-        resultado.textContent = "❌ Error al consultar.";
-        resultado.style.color = "red";
+      } catch (err) {
+        resultado.innerHTML = `<p style="color:red;">${err.message}</p>`;
       }
     }
   </script>
