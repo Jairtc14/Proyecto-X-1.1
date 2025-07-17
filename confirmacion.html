@@ -192,6 +192,25 @@
       <p><strong>Ciudad:</strong> ${datos.ciudad || ""}</p>
       <p><strong>Dirección:</strong> ${datos.direccion || ""}</p>
     `;
+
+    // Enviar datos al backend para guardarlos
+    fetch("https://backend-proyecto-x.onrender.com/guardar-confirmacion", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    codigo: pedidoID,
+    nombre: datos.nombre || "",
+    telefono: datos.telefono || "",
+    ciudad: datos.ciudad || "",
+    combo: datos.combo || ""
+  })
+})
+.then(res => res.json())
+.then(res => console.log("✅ Datos de confirmación guardados:", res))
+.catch(err => console.error("❌ Error al guardar datos en backend:", err));
+    
   </script>
     
 <!-- Burbuja flotante de WhatsApp -->
