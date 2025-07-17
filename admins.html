@@ -137,6 +137,12 @@
     alert("❌ Por favor ingresa un correo válido.");
     return;
   }
+
+// Validar formato de código: PX seguido de 6 dígitos
+  const codigoValido = /^PX\d{6}$/.test(codigo);
+  if (!codigoValido) {
+    return res.status(400).json({ mensaje: "Código inválido. Debe tener formato PX seguido de 6 números, ej: PX123456" });
+  }
     
     try {
       const res = await fetch(`${backendURL}/guardar-codigo`, {
