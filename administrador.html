@@ -129,33 +129,40 @@
     }
 
     async function confirmarCodigo() {
-      const codigo = document.getElementById("codigo-confirmar").value.trim();
-      const resultadoDiv = document.getElementById("resultado-confirmacion");
+  const codigo = document.getElementById("codigo-confirmar").value.trim();
+  const resultadoDiv = document.getElementById("resultado-confirmacion");
 
-      if (!codigo) {
-        resultadoDiv.innerHTML = "<p style='color:red'>Por favor ingresa un código</p>";
-        return;
-      }
+  if (!codigo) {
+    resultadoDiv.innerHTML = "<p style='color:red'>Por favor ingresa un código</p>";
+    return;
+  }
 
-      try {
-        const respuesta = await fetch(`https://backend-proyecto-x.onrender.com/verificar-codigo/${codigo}`);
-        const data = await respuesta.json();
+  try {
+    const respuesta = await fetch("https://backend-proyecto-x.onrender.com/enviar-numeros", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ codigo })
+    });
 
-        if (!respuesta.ok) {
-          resultadoDiv.innerHTML = `<p style="color:red">${data.mensaje || "Código no encontrado"}</p>`;
-          return;
-        }
+    const data = await respuesta.json();
 
-        resultadoDiv.innerHTML = `
-          <p><strong>Nombre:</strong> ${data.nombre}</p>
-          <p><strong>Teléfono:</strong> ${data.telefono}</p>
-          <p><strong>Combo:</strong> ${data.combo}</p>
-          <p style="color:green">✅ Código confirmado correctamente</p>
-        `;
-      } catch (err) {
-        resultadoDiv.innerHTML = "<p style='color:red'>Error al conectar con el servidor</p>";
-      }
+    if (!respuesta.ok) {
+      resultadoDiv.innerHTML = `<p style="color:red">${data.mensaje || "No se pudo enviar el correo"}</p>`;
+      return;
     }
+
+    resultadoDiv.innerHTML = `
+      <p><strong>Nombre:</strong> ${data.nombre}</p>
+      <p><strong>Teléfono:</strong> ${data.telefono}</p>
+      <p><strong>Combo:</strong> ${data.combo}</p>
+      <p style="color:green">✅ Correo enviado exitosamente</p>
+    `;
+  } catch (err) {
+    resultadoDiv.innerHTML = "<p style='color:red'>Error al conectar con el servidor</p>";
+  }
+}
   </script>
 </body>
 </html>
