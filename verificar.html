@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Verificar código</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f3f4f6;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 60px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #43a047;
+      transform: translateY(-2px);
+    }
+
+    .resultado {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🔍 Verificar código</h2>
+    <input type="text" id="codigo" placeholder="Ingrese el código (ej: PX123456)">
+    <button onclick="verificarCodigo()">Verificar</button>
+
+    <div id="resultado" class="resultado"></div>
+  </div>
+
+  <script>
+    async function verificarCodigo() {
+      const codigo = document.getElementById('codigo').value.trim();
+      const resultado = document.getElementById('resultado');
+      resultado.innerHTML = '';
+
+      if (!codigo || !codigo.startsWith('PX')) {
+        return resultado.innerHTML = '<p style="color: red;">Código inválido</p>';
+      }
+
+      try {
+        const res = await fetch(`https://backend-proyecto-x.onrender.com/verificar-codigo/${codigo}`);
+        if (!res.ok) throw new Error("Código no encontrado");
+
+        const data = await res.json();
+
+        resultado.innerHTML = `
+          <p><strong>Nombre:</strong> ${data.nombre}</p>
+          <p><strong>Combo:</strong> ${data.combo}</p>
+          <p><strong>Teléfono:</strong> ${data.telefono}</p>
+        `;
+      } catch (err) {
+        resultado.innerHTML = `<p style="color: red;">${err.message}</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
