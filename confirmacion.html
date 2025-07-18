@@ -220,22 +220,17 @@
 
 <script>
 
-  <!-- No recargar confirmacion.html -->
+  //NO RECARGAR PÁGINA
 <script>
-  let salir = false;
-
   window.addEventListener("beforeunload", function (e) {
-    salir = true;
     e.preventDefault();
-    e.returnValue = "¿Estás seguro de que deseas salir o recargar? Perderás la información actual.";
+    e.returnValue = "¿Estás seguro de que deseas salir o recargar esta página?";
   });
 
-  window.addEventListener("unload", function () {
-    if (salir) {
-      // Redirige al index al recargar o salir
-      window.location.href = "index.html";
-    }
-  });
+  // Detectar si se volvió a cargar para redirigir (opcional, experimental)
+  if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
+    window.location.href = "index.html";
+  }
 </script>
 
 </body>
