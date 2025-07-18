@@ -37,14 +37,53 @@
   </style>
 </head>
 <body>
-  <h1>Bienvenido, administrador principal</h1>
-  <p>Esta es tu página personalizada de administración.</p>
+  <h1>Bienvenido Jair</h1>
+  <p>¿Qué deseas hacer hoy?</p>
   <a href="login.html">Cerrar sesión</a>
 
+  
+<div id="verificacion-section">
+  <h2>🔍Verificar código</h2>
+  <input type="text" id="codigo-verificar" placeholder="Ingresa el código" />
+  <button onclick="verificarCodigo()">Verificar</button>
+
+  <div id="resultado-verificacion" style="margin-top: 15px;"></div>
+</div>
+  
   <script>
   fetch("https://backend-proyecto-x.onrender.com")
     .then(() => console.log("🟢 Backend conectado"))
     .catch(() => console.warn("🔴 No se pudo conectar al backend"));
+</script>
+
+<script>
+  async function verificarCodigo() {
+    const codigo = document.getElementById("codigo-verificar").value.trim();
+    const resultadoDiv = document.getElementById("resultado-verificacion");
+
+    if (!codigo) {
+      resultadoDiv.innerHTML = "<p style='color:red'>Por favor ingresa un código</p>";
+      return;
+    }
+
+    try {
+      const respuesta = await fetch(`https://backend-proyecto-x.onrender.com/verificar-codigo/${codigo}`);
+      const data = await respuesta.json();
+
+      if (!respuesta.ok) {
+        resultadoDiv.innerHTML = `<p style="color:red">${data.mensaje || "Código no encontrado"}</p>`;
+        return;
+      }
+
+      resultadoDiv.innerHTML = `
+        <p><strong>Nombre:</strong> ${data.nombre}</p>
+        <p><strong>Teléfono:</strong> ${data.telefono}</p>
+        <p><strong>Combo:</strong> ${data.combo}</p>
+      `;
+    } catch (err) {
+      resultadoDiv.innerHTML = "<p style='color:red'>Error al conectar con el servidor</p>";
+    }
+  }
 </script>
 
 </body>
