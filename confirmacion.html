@@ -216,6 +216,25 @@
 <!-- Burbuja flotante de WhatsApp -->
 <a href="https://wa.me/593981279614?text=Hola%2C%20Proyecto%20X%20mi%20número%20de%20pedido%20es%20...." target="_blank" id="whatsapp-float">
   <img src="img/whatsapp.png" alt="WhatsApp" />
+
+<script>
+  let salir = false;
+
+  window.addEventListener("beforeunload", function (e) {
+    salir = true;
+    e.preventDefault();
+    e.returnValue = "¿Estás seguro de que deseas salir o recargar? Perderás la información actual.";
+  });
+
+  window.addEventListener("unload", function () {
+    if (salir) {
+      // Redirige al index al recargar o salir
+      window.location.href = "index.html";
+    }
+  });
+</script>
+
+  
 </a>
 </body>
 </html>
