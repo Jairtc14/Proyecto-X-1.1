@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,33 +19,143 @@
     p {
       font-size: 1.2em;
     }
-    a {
+    a, button {
       display: inline-block;
-      margin-top: 30px;
+      margin-top: 20px;
       padding: 12px 20px;
       background-color: #1e90ff;
       color: white;
       text-decoration: none;
+      border: none;
       border-radius: 8px;
       font-weight: bold;
+      cursor: pointer;
       transition: background-color 0.3s ease;
     }
-    a:hover {
+    a:hover, button:hover {
       background-color: #005bbb;
+    }
+
+    .seccion-codigo {
+      display: none;
+      margin-top: 20px;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    input {
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 200px;
+    }
+
+    .resultado {
+      margin-top: 10px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <h1>Bienvenido Jair</h1>
   <p>¿Qué deseas hacer hoy?</p>
-  
-  <script>
-  fetch("https://backend-proyecto-x.onrender.com")
-    .then(() => console.log("🟢 Backend conectado"))
-    .catch(() => console.warn("🔴 No se pudo conectar al backend"));
-</script>
 
-<a href="login.html">Cerrar sesión</a>
-  
+  <!-- Botones -->
+  <button onclick="toggleSeccion('verificar')">🔍 Verificar código</button>
+  <div id="verificar" class="seccion-codigo">
+    <input type="text" id="codigo-verificar" placeholder="Ingresa el código" />
+    <button onclick="verificarCodigo()">Buscar</button>
+    <div id="resultado-verificacion" class="resultado"></div>
+  </div>
+
+  <button onclick="toggleSeccion('confirmar')">✅ Confirmar código</button>
+  <div id="confirmar" class="seccion-codigo">
+    <input type="text" id="codigo-confirmar" placeholder="Ingresa el código" />
+    <button onclick="confirmarCodigo()">Buscar</button>
+    <div id="resultado-confirmacion" class="resultado"></div>
+  </div>
+
+  <a href="login.html">Cerrar sesión</a>
+
+  <!-- Backend Conectividad -->
+  <script>
+    fetch("https://backend-proyecto-x.onrender.com")
+      .then(() => console.log("🟢 Backend conectado"))
+      .catch(() => console.warn("🔴 No se pudo conectar al backend"));
+  </script>
+
+  <!-- Scripts funcionales -->
+  <script>
+    function toggleSeccion(id) {
+      const seccion = document.getElementById(id);
+      // Cerrar otras secciones
+      document.querySelectorAll('.seccion-codigo').forEach(s => {
+        if (s.id !== id) s.style.display = 'none';
+      });
+      // Alternar la actual
+      seccion.style.display = (seccion.style.display === 'none' || seccion.style.display === '') ? 'block' : 'none';
+    }
+
+    async function verificarCodigo() {
+      const codigo = document.getElementById("codigo-verificar").value.trim();
+      const resultadoDiv = document.getElementById("resultado-verificacion");
+
+      if (!codigo) {
+        resultadoDiv.innerHTML = "<p style='color:red'>Por favor ingresa un código</p>";
+        return;
+      }
+
+      try {
+        const respuesta = await fetch(`https://backend-proyecto-x.onrender.com/verificar-codigo/${codigo}`);
+        const data = await respuesta.json();
+
+        if (!respuesta.ok) {
+          resultadoDiv.innerHTML = `<p style="color:red">${data.mensaje || "Código no encontrado"}</p>`;
+          return;
+        }
+
+        resultadoDiv.innerHTML = `
+          <p><strong>Nombre:</strong> ${data.nombre}</p>
+          <p><strong>Teléfono:</strong> ${data.telefono}</p>
+          <p><strong>Combo:</strong> ${data.combo}</p>
+        `;
+      } catch (err) {
+        resultadoDiv.innerHTML = "<p style='color:red'>Error al conectar con el servidor</p>";
+      }
+    }
+
+    async function confirmarCodigo() {
+      const codigo = document.getElementById("codigo-confirmar").value.trim();
+      const resultadoDiv = document.getElementById("resultado-confirmacion");
+
+      if (!codigo) {
+        resultadoDiv.innerHTML = "<p style='color:red'>Por favor ingresa un código</p>";
+        return;
+      }
+
+      try {
+        const respuesta = await fetch(`https://backend-proyecto-x.onrender.com/verificar-codigo/${codigo}`);
+        const data = await respuesta.json();
+
+        if (!respuesta.ok) {
+          resultadoDiv.innerHTML = `<p style="color:red">${data.mensaje || "Código no encontrado"}</p>`;
+          return;
+        }
+
+        resultadoDiv.innerHTML = `
+          <p><strong>Nombre:</strong> ${data.nombre}</p>
+          <p><strong>Teléfono:</strong> ${data.telefono}</p>
+          <p><strong>Combo:</strong> ${data.combo}</p>
+          <p style="color:green">✅ Código confirmado correctamente</p>
+        `;
+      } catch (err) {
+        resultadoDiv.innerHTML = "<p style='color:red'>Error al conectar con el servidor</p>";
+      }
+    }
+  </script>
 </body>
 </html>
