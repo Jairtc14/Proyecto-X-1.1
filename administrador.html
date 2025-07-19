@@ -164,5 +164,40 @@
   }
 }
   </script>
+
+<script>
+function confirmarCodigo() {
+  const codigo = document.getElementById("codigo-confirmar").value.trim();
+  const resultado = document.getElementById("resultado-confirmacion");
+
+  if (!codigo) {
+    resultado.textContent = "Por favor, ingresa un código.";
+    resultado.style.color = "red";
+    return;
+  }
+
+  fetch("https://backend-proyecto-x.onrender.com/enviar-numeros", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ codigo })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.enviado) {
+      resultado.textContent = "✅ Correo enviado correctamente.";
+      resultado.style.color = "green";
+    } else {
+      resultado.textContent = data.error || "❌ Error al enviar el correo.";
+      resultado.style.color = "red";
+    }
+  })
+  .catch(err => {
+    resultado.textContent = "❌ Error de conexión con el servidor.";
+    resultado.style.color = "red";
+    console.error("Error al enviar:", err);
+  });
+}
+</script>
+  
 </body>
 </html>
