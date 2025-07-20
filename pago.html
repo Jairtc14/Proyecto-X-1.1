@@ -155,6 +155,53 @@
   margin: 0 auto;
   border: none;
 }
+
+
+    
+    #btn-continuar {
+  display: none;
+}
+
+#btn-continuar {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  display: none; /* oculto por defecto */
+}
+
+#btn-continuar.mostrar {
+  display: block;
+  opacity: 1;
+  transform: scale(1);
+}
+
+    #terminosTexto {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  padding: 0 15px;
+}
+
+#terminosTexto.mostrar {
+  max-height: 500px; /* o lo suficiente para tu contenido */
+  padding: 15px;
+}
+
+.terminos-animados {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+  padding: 0 15px;
+  margin-top: 0;
+  opacity: 0;
+}
+
+.terminos-animados.mostrar {
+  max-height: 500px; /* ajusta si tu contenido es más largo */
+  padding: 15px;
+  margin-top: 15px;
+  opacity: 1;
+}
     
   </style>
 </head>
@@ -216,7 +263,7 @@
         <input type="text" id="direccion" name="direccion" required />
 
         <!-- Aquí el botón -->
-        
+        <button class="btn-comprar" id="btn-continuar" disabled>Continuar</button>
       </form>
     </div>
 
@@ -250,13 +297,13 @@
           ⚠️ Debes aceptar los términos y condiciones para continuar.
         </div>
 
-        <div id="contenido-terminos" style="display:none; margin-top: 15px; background-color: #f1f1f1; padding: 15px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.9em;">
-          <strong>Términos y Condiciones:</strong>
-          <p>1. Una vez completado el pago, no se realizarán devoluciones.</p>
-          <p>2. Los números se asignan de manera aleatoria y serán enviados al correo registrado.</p>
-          <p>3. La participación implica aceptar que el sorteo será realizado según las reglas del sitio.</p>
-          <p>4. Proyecto X no se responsabiliza por errores en los datos proporcionados.</p>
-          <p>5. El sorteo se efectuará una vez se vendan todos los números disponibles.</p>
+        <div id="contenido-terminos" class="terminos-animados">
+        <strong>Términos y Condiciones:</strong>
+        <p>1. Una vez completado el pago, no se realizarán devoluciones.</p>
+        <p>2. Los números se asignan de manera aleatoria y serán enviados al correo registrado.</p>
+        <p>3. La participación implica aceptar que el sorteo será realizado según las reglas del sitio.</p>
+        <p>4. Proyecto X no se responsabiliza por errores en los datos proporcionados.</p>
+        <p>5. El sorteo se efectuará una vez se vendan todos los números disponibles.</p>
         </div>
       </div>
 
@@ -264,9 +311,6 @@
         ⚠️ <strong>Importante:</strong> Si no estás 100% seguro de realizar la compra, por favor no procedas.  
         Una vez confirmado el pago, <strong>no hay reembolsos</strong> y se asignarán tus números automáticamente.
       </div>
-
-          <!-- Aquí el botón -->
-        <button class="btn-comprar" id="btn-continuar" disabled>Continuar</button>
       
     </div>
   </div>
@@ -306,17 +350,25 @@
 
       // Al marcar checkbox
       aceptarTerminos.addEventListener("change", () => {
-        btnContinuar.disabled = !aceptarTerminos.checked;
-        if (aceptarTerminos.checked) {
-          mensajeError.style.display = "none";
-        }
-      });
+  if (aceptarTerminos.checked) {
+    mensajeError.style.display = "none";
+    btnContinuar.classList.add("mostrar");
+  } else {
+    btnContinuar.classList.remove("mostrar");
+    // Esperamos la animación antes de ocultar
+    setTimeout(() => {
+      if (!btnContinuar.classList.contains("mostrar")) {
+        btnContinuar.style.display = "none";
+      }
+    }, 300);
+  }
+});
 
       // Mostrar términos
-      toggleTerminos.addEventListener("click", (e) => {
-        e.preventDefault();
-        contenidoTerminos.style.display = contenidoTerminos.style.display === "none" ? "block" : "none";
-      });
+     toggleTerminos.addEventListener("click", (e) => {
+      e.preventDefault();
+      contenidoTerminos.classList.toggle("mostrar");
+    });
 
       // Validación al enviar el form
       form.addEventListener("submit", (e) => {
