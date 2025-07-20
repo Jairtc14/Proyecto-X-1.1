@@ -1,231 +1,224 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestión de Códigos - Proyecto X</title>
+  <title>Admin - Mi Página</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 40px;
-      padding: 0;
-      background-color: #f4f4f4;
-    }
-
-    h1 {
+      background-color: #e6f0ff;
+      color: #003366;
       text-align: center;
+      padding: 40px;
+    }
+    h1 {
+      font-size: 2.8em;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 1.2em;
+    }
+    a, button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 20px;
+      background-color: #1e90ff;
+      color: white;
+      text-decoration: none;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    a:hover, button:hover {
+      background-color: #005bbb;
     }
 
-    form {
-      background-color: white;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 500px;
-      margin: 20px auto;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    .seccion-codigo {
+      display: none;
+      margin-top: 20px;
+      animation: fadeIn 0.3s ease-in-out;
     }
 
-    label {
-      display: block;
-      margin-top: 10px;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      margin-bottom: 10px;
+    input {
+      padding: 8px;
       border-radius: 5px;
       border: 1px solid #ccc;
+      width: 200px;
     }
 
-    button {
-      background-color: #28a745;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #218838;
-    }
-
-    .respuesta {
-      text-align: center;
+    .resultado {
+      margin-top: 10px;
       font-weight: bold;
-      margin-top: 20px;
     }
+
+
+    .botones-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px; /* espacio entre los botones */
+}
+
+.botones-container > * {
+  width: 190px; /* ancho fijo para todos los botones */
+}
+
   </style>
 </head>
 <body>
+  <h1>Bienvenido Admin</h1>
+  <p>¿Qué deseas hacer hoy?</p>
 
-  <h1>Gestión de Códigos</h1>
+  <div class="botones-container">
 
-  <!-- Formulario para guardar -->
-<form id="form-guardar">
-  <h2>Guardar código</h2>
-  <label for="codigoGuardar">Código:</label>
-  <input type="text" id="codigoGuardar" required>
-
-  <label for="combo">Combo seleccionado:</label>
-  <select id="combo" onchange="mostrarInputExtra()">
-    <option value="3">Combo 3</option>
-    <option value="5">Combo 5</option>
-    <option value="10">Combo 10</option>
-    <option value="15">Combo 15</option>
-    <option value="20">Combo 20</option>
-    <option value="otro">Más números</option>
-  </select>
-
-  <div id="combo-extra" style="display: none;">
-    <label for="cantidadExtra">Cantidad (mayor a 20):</label>
-    <input type="number" id="cantidadExtra" min="21" placeholder="Ej: 25">
+  <!-- Botón y sección: Verificar código -->
+  <button onclick="toggleSeccion('verificar')">🔍 Verificar código</button>
+  <div id="verificar" class="seccion-codigo">
+    <input type="text" id="codigo-verificar" placeholder="Ingresa el código" />
+    <button onclick="verificarCodigo()">Buscar</button>
+    <div id="resultado-verificacion" class="resultado"></div>
   </div>
 
-  <label for="correoGuardar">Correo:</label>
-  <input type="email" id="correoGuardar" required>
+  <!-- Botón y sección: Confirmar código -->
+  <button onclick="toggleSeccion('confirmar')">✅ Confirmar código</button>
+  <div id="confirmar" class="seccion-codigo">
+    <input type="text" id="codigo-confirmar" placeholder="Ingresa el código" />
+    <button onclick="confirmarCodigo()">Enviar</button>
+    <div id="resultado-confirmacion" class="resultado"></div>
+  </div>
 
-  <button type="submit">Guardar Código</button>
-</form>
+  <!-- Cerrar sesión -->
+  <a href="login.html">Cerrar sesión</a>
 
-  <!-- Formulario para confirmar -->
-  <form id="form-confirmar">
-    <h2>Confirmar código</h2>
-    <label for="codigoConfirmar">Código:</label>
-    <input type="text" id="codigoConfirmar" required>
+</div>
 
-    <button type="submit">Confirmar Código</button>
-  </form>
 
-  <div class="respuesta" id="respuesta"></div>
+  <!-- Backend Conectividad -->
+  <script>
+    fetch("https://backend-proyecto-x.onrender.com")
+      .then(() => console.log("🟢 Backend conectado"))
+      .catch(() => console.warn("🔴 No se pudo conectar al backend"));
+  </script>
 
- <script>
-  const backendURL = "https://backend-proyecto-x.onrender.com";
-
-  function mostrarInputExtra() {
-    const combo = document.getElementById("combo").value;
-    const extra = document.getElementById("combo-extra");
-    extra.style.display = combo === "otro" ? "block" : "none";
-  }
-
-  function obtenerCantidadSeleccionada() {
-    const combo = document.getElementById("combo").value;
-    if (combo === "otro") {
-      const extra = parseInt(document.getElementById("cantidadExtra").value);
-      if (isNaN(extra) || extra <= 20) {
-        alert("Debes ingresar una cantidad válida mayor a 20");
-        return null;
-      }
-      return extra;
+  <!-- Scripts funcionales -->
+  <script>
+    function toggleSeccion(id) {
+      const seccion = document.getElementById(id);
+      // Cerrar otras secciones
+      document.querySelectorAll('.seccion-codigo').forEach(s => {
+        if (s.id !== id) s.style.display = 'none';
+      });
+      // Alternar la actual
+      seccion.style.display = (seccion.style.display === 'none' || seccion.style.display === '') ? 'block' : 'none';
     }
-    return parseInt(combo);
-  }
 
-  // Guardar código
-  document.getElementById("form-guardar").addEventListener("submit", async function(e) {
-    e.preventDefault();
+    async function verificarCodigo() {
+      const codigo = document.getElementById("codigo-verificar").value.trim();
+      const resultadoDiv = document.getElementById("resultado-verificacion");
 
-    const codigo = document.getElementById("codigoGuardar").value;
-    const cantidad = obtenerCantidadSeleccionada();
-    const correo = document.getElementById("correoGuardar").value;
+      if (!codigo) {
+        resultadoDiv.innerHTML = "<p style='color:red'>Por favor ingresa un código</p>";
+        return;
+      }
 
-    if (cantidad === null) return;
+      try {
+        const respuesta = await fetch(`https://backend-proyecto-x.onrender.com/verificar-codigo/${codigo}`);
+        const data = await respuesta.json();
 
-// Validación de correo válido:
-  const correoValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
-  if (!correoValido) {
-    alert("❌ Por favor ingresa un correo válido.");
+        if (!respuesta.ok) {
+          resultadoDiv.innerHTML = `<p style="color:red">${data.mensaje || "Código no encontrado"}</p>`;
+          return;
+        }
+
+        resultadoDiv.innerHTML = `
+          <p><strong>Nombre:</strong> ${data.nombre}</p>
+          <p><strong>Teléfono:</strong> ${data.telefono}</p>
+          <p><strong>Combo:</strong> ${data.combo}</p>
+        `;
+      } catch (err) {
+        resultadoDiv.innerHTML = "<p style='color:red'>Error al conectar con el servidor</p>";
+      }
+    }
+
+    async function confirmarCodigo() {
+  const codigo = document.getElementById("codigo-confirmar").value.trim();
+  const resultadoDiv = document.getElementById("resultado-confirmacion");
+
+  if (!codigo) {
+    resultadoDiv.innerHTML = "<p style='color:red'>Por favor ingresa un código</p>";
     return;
   }
 
-// Validar formato de código: PX seguido de 6 dígitos
-  const codigoValido = /^PX\d{6}$/.test(codigo);
-  if (!codigoValido) {
-    return res.status(400).json({ mensaje: "Código inválido. Debe tener formato PX seguido de 6 números, ej: PX123456" });
-  }
-    
-    try {
-      const res = await fetch(`${backendURL}/guardar-codigo`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ codigo, combo: cantidad, correo })
-      });
-
-      const data = await res.json();
-      
-      if (data.numeros) {
-  document.getElementById("respuesta").innerHTML = `
-    ${data.mensaje}<br>
-    <strong>Números generados:</strong> ${data.numeros.join(", ")}
-  `;
-} else {
-  document.getElementById("respuesta").textContent = data.mensaje || "Código guardado correctamente";
-}
-
-    } catch (err) {
-      document.getElementById("respuesta").textContent = "Error al guardar el código";
-    }
-  });
-
-    // Confirmar código
-    document.getElementById("form-confirmar").addEventListener("submit", async function(e) {
-      e.preventDefault();
-
-      const codigo = document.getElementById("codigoConfirmar").value;
-
-      try {
-        const res = await fetch(`${backendURL}/confirmar-codigo`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ codigo })
-        });
-
-        const data = await res.json();
-        document.getElementById("respuesta").textContent = data.mensaje || "Código confirmado correctamente";
-      } catch (err) {
-        document.getElementById("respuesta").textContent = "Error al confirmar el código";
-      }
+  try {
+    const respuesta = await fetch("https://backend-proyecto-x.onrender.com/enviar-numeros", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ codigo })
     });
+
+    const data = await respuesta.json();
+
+    if (!respuesta.ok) {
+      resultadoDiv.innerHTML = `<p style="color:red">${data.mensaje || "No se pudo enviar el correo"}</p>`;
+      return;
+    }
+
+    resultadoDiv.innerHTML = `
+      <p><strong>Nombre:</strong> ${data.nombre}</p>
+      <p><strong>Teléfono:</strong> ${data.telefono}</p>
+      <p><strong>Combo:</strong> ${data.combo}</p>
+      <p style="color:green">✅ Correo enviado exitosamente</p>
+    `;
+  } catch (err) {
+    resultadoDiv.innerHTML = "<p style='color:red'>Error al conectar con el servidor</p>";
+  }
+}
   </script>
 
-  <script>
-  fetch("https://backend-proyecto-x.onrender.com")
-    .then(() => console.log("🟢 Backend conectado"))
-    .catch(() => console.warn("🔴 No se pudo conectar al backend"));
-</script>
+<script>
+function confirmarCodigo() {
+  const codigo = document.getElementById("codigo-confirmar").value.trim();
+  const resultado = document.getElementById("resultado-confirmacion");
 
-  <script>
-  function mostrarInputExtra() {
-    const combo = document.getElementById("combo").value;
-    const extra = document.getElementById("combo-extra");
+  if (!codigo) {
+    resultado.textContent = "Por favor, ingresa un código.";
+    resultado.style.color = "red";
+    return;
+  }
 
-    if (combo === "otro") {
-      extra.style.display = "block";
+  fetch("https://backend-proyecto-x.onrender.com/enviar-numeros", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ codigo })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.enviado) {
+      resultado.textContent = "✅ Correo enviado correctamente.";
+      resultado.style.color = "green";
     } else {
-      extra.style.display = "none";
+      resultado.textContent = data.error || "❌ Error al enviar el correo.";
+      resultado.style.color = "red";
     }
-  }
-
-  function obtenerCantidadSeleccionada() {
-    const combo = document.getElementById("combo").value;
-    if (combo === "otro") {
-      const extra = parseInt(document.getElementById("cantidadExtra").value);
-      if (isNaN(extra) || extra <= 20) {
-        alert("Debes ingresar una cantidad válida mayor a 20");
-        return null;
-      }
-      return extra;
-    }
-    return parseInt(combo);
-  }
-
-  // Este es el valor que debes usar en tu lógica al generar los números
-  // Ejemplo:
-  // const cantidad = obtenerCantidadSeleccionada();
-  // if (cantidad !== null) { ... }
+  })
+  .catch(err => {
+    resultado.textContent = "❌ Error de conexión con el servidor.";
+    resultado.style.color = "red";
+    console.error("Error al enviar:", err);
+  });
+}
 </script>
 
+  
 </body>
 </html>
