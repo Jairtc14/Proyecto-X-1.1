@@ -542,3 +542,10 @@ padding: 12px 0 !important;
 padding: 0 15px !important;
 }
 }
+
+/* imagen de logo sortech*/
+.logo-sortech {
+  height: 60px; /* tamaño del logo */
+  display: block;
+  margin: 0 auto;
+}
