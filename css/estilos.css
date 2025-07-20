@@ -545,8 +545,8 @@ padding: 0 15px !important;
 
 /* imagen de logo sortech*/
 .logo-sortech {
-  width: 60%;
-  max-width: 200px
+  width: 80%;
+  max-width: 100px
   height: auto; /* tamaño del logo */
   display: block;
   margin: 0 auto;
