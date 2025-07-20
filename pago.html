@@ -157,17 +157,18 @@
 }
 
 
-#btn-continuar {
-  display: none;
-}
-
-}
-
+    
 #btn-continuar {
   opacity: 0;
   transform: scale(0.95);
   transition: opacity 0.3s ease, transform 0.3s ease;
-  display: none; /* oculto por defecto */
+  display: none;
+}
+
+#btn-continuar.mostrar {
+  display: block;
+  opacity: 1;
+  transform: scale(1);
 }
 
 #btn-continuar.mostrar {
@@ -339,6 +340,10 @@
           advertencia.style.display = "block";
           terminosWrapper.style.display = "block";
           btnContinuar.disabled = !aceptarTerminos.checked;
+          
+          if (aceptarTerminos.checked) {
+            btnContinuar.classList.add("mostrar");
+          }
         } else {
           advertencia.style.display = "none";
           terminosWrapper.style.display = "none";
