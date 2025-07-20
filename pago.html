@@ -158,8 +158,6 @@
 
 
     
-    #btn-continuar {
-  display: none;
 }
 
 #btn-continuar {
@@ -371,8 +369,11 @@
     });
 
       // Validación al enviar el form
-      form.addEventListener("submit", (e) => {
+      form.addEventListener("submit", function(e) {
   e.preventDefault();
+  // Procesar datos y luego redirigir
+  window.location.href = "confirmacion.html";
+});
 
   if (metodoPago.value === "transferencia" && !aceptarTerminos.checked) {
     mensajeError.style.display = "block";
