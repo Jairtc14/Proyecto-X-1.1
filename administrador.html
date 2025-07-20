@@ -58,13 +58,28 @@
       margin-top: 10px;
       font-weight: bold;
     }
+
+
+    .botones-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px; /* espacio entre los botones */
+}
+
+.botones-container > * {
+  width: 250px; /* ancho fijo para todos los botones */
+}
+
   </style>
 </head>
 <body>
   <h1>Bienvenido Jair</h1>
   <p>¿Qué deseas hacer hoy?</p>
 
-  <!-- Botones -->
+  <div class="botones-container">
+
+  <!-- Botón y sección: Verificar código -->
   <button onclick="toggleSeccion('verificar')">🔍 Verificar código</button>
   <div id="verificar" class="seccion-codigo">
     <input type="text" id="codigo-verificar" placeholder="Ingresa el código" />
@@ -72,6 +87,7 @@
     <div id="resultado-verificacion" class="resultado"></div>
   </div>
 
+  <!-- Botón y sección: Confirmar código -->
   <button onclick="toggleSeccion('confirmar')">✅ Confirmar código</button>
   <div id="confirmar" class="seccion-codigo">
     <input type="text" id="codigo-confirmar" placeholder="Ingresa el código" />
@@ -79,14 +95,19 @@
     <div id="resultado-confirmacion" class="resultado"></div>
   </div>
 
+  <!-- Botón y sección: Buscar número -->
   <button onclick="toggleSeccion('buscar-numero')">🔎 Buscar número</button>
-<div id="buscar-numero" class="seccion-codigo">
-  <input type="text" id="numero-buscar" placeholder="Ingresa el número" />
-  <button onclick="buscarPorNumero()">Buscar</button>
-  <div id="resultado-busqueda-numero" class="resultado"></div>
+  <div id="buscar-numero" class="seccion-codigo">
+    <input type="text" id="numero-buscar" placeholder="Ingresa el número" />
+    <button onclick="buscarPorNumero()">Buscar</button>
+    <div id="resultado-busqueda-numero" class="resultado"></div>
+  </div>
+
+  <!-- Cerrar sesión -->
+  <a href="login.html">Cerrar sesión</a>
+
 </div>
 
-  <a href="login.html">Cerrar sesión</a>
 
   <!-- Backend Conectividad -->
   <script>
