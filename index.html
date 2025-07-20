@@ -47,10 +47,16 @@
     <li>Revisa el correo electrónico registrado en la pestaña de pago, allí estarán tus números.</li>
   </ol>
 </section>
+<!-- mensaje todos números vendidos -->
+<div id="mensaje-completo" style="display: none; text-align: center; font-size: 20px; font-weight: bold; margin-top: 20px; color: red;">
+  🎉 ¡Todos los números han sido vendidos!
+</div>
 
   <h3 class="texto-centrado3">¡Adquiere tus números!</h3>
   <p class="texto-centrado3">Valor por unidad $1</p>
-
+  
+<div id="seleccion-combos">
+  
 <!-- Primera fila: 3 combos -->
 <div class="fila-combos fila-1">
   <div class="combo-card">
@@ -93,6 +99,8 @@
   <button class="btn-comprar" onclick="redirigirCompra()">Comprar</button>
 </div>
 <p id="mensaje-error" style="color: red; margin-top: 10px; display: none;"></p>
+</div>
+
 </div>
   
 <!-- Botón consultar números -->
@@ -172,6 +180,13 @@
       const porcentaje = Math.round((vendidos / total) * 100);
 
       animarBarraProgreso(porcentaje);
+
+        // Mostrar mensaje y ocultar combos si ya se completó
+    if (porcentaje >= 100) {
+      document.getElementById("seccion-combos").style.display = "none";
+      document.getElementById("mensaje-completo").style.display = "block";
+    }
+      
     } catch (err) {
       console.error("Error al obtener progreso:", err);
       barra.textContent = "Error";
