@@ -79,6 +79,13 @@
     <div id="resultado-confirmacion" class="resultado"></div>
   </div>
 
+  <button onclick="toggleSeccion('buscar-numero')">🔎 Buscar número</button>
+<div id="buscar-numero" class="seccion-codigo">
+  <input type="text" id="numero-buscar" placeholder="Ingresa el número" />
+  <button onclick="buscarPorNumero()">Buscar</button>
+  <div id="resultado-busqueda-numero" class="resultado"></div>
+</div>
+
   <a href="login.html">Cerrar sesión</a>
 
   <!-- Backend Conectividad -->
@@ -198,6 +205,37 @@ function confirmarCodigo() {
   });
 }
 </script>
+
+<script>
+  async function buscarPorNumero() {
+    const numero = document.getElementById("numero-buscar").value.trim();
+    const resultadoDiv = document.getElementById("resultado-busqueda-numero");
+
+    if (!numero) {
+      resultadoDiv.innerHTML = "<p style='color:red'>Por favor ingresa un número</p>";
+      return;
+    }
+
+    try {
+      const respuesta = await fetch(`https://backend-proyecto-x.onrender.com/buscar-por-numero/${numero}`);
+      const data = await respuesta.json();
+
+      if (!respuesta.ok) {
+        resultadoDiv.innerHTML = `<p style="color:red">${data.mensaje || "Número no encontrado"}</p>`;
+        return;
+      }
+
+      resultadoDiv.innerHTML = `
+        <p><strong>Nombre:</strong> ${data.nombre}</p>
+        <p><strong>Correo:</strong> ${data.correo}</p>
+        <p><strong>Teléfono:</strong> ${data.telefono}</p>
+      `;
+    } catch (err) {
+      resultadoDiv.innerHTML = "<p style='color:red'>Error al conectar con el servidor</p>";
+    }
+  }
+</script>
+
   
 </body>
 </html>
