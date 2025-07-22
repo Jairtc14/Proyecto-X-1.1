@@ -536,7 +536,7 @@
 
             <hr class="divider">
 
-            <!-- Nueva sección de método de pago -->
+            <!-- Sección de método de pago -->
             <div class="payment-method-section">
                 <div class="form-group full-width">
                     <label for="metodo-pago">💳 Método de pago <span class="required">*</span></label>
@@ -728,6 +728,15 @@
             this.value = value;
         });
 
+
+          document.addEventListener("DOMContentLoaded", () => {
+            const combo = parseInt(localStorage.getItem("comboSeleccionado")) || 0;
+            const precioTotal = combo * 1; // $1 por número
+        
+            actualizarDetalleCompra(`${combo} números`, `$${precioTotal}`);
+          });
+
+        
         // Función para actualizar los detalles de compra (puedes llamarla desde otra parte de tu aplicación)
         function actualizarDetalleCompra(combo, total) {
             document.getElementById('combo-selected').textContent = combo;
