@@ -6,39 +6,55 @@
   <title>SORTECH - Página Demo</title>
   <link rel="stylesheet" href="css/estilos.css">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    /* Inline styles for the button to reduce the number of style attributes */
+    .btn-comprar {
+      display: inline-block;
+      padding: 15px 30px;
+      font-size: 18px;
+      background-color: #4caf50;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    .btn-comprar:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+  </style>
 </head>
 <body>
 
-  <header>
+<header>
   <a href="login.html">
     <img src="img/logo-sortech.png" alt="Logo Sortech" class="logo-sortech">
   </a>
 </header>
 
-  <nav>
-    <ul>
-      <li><a href="index.html">Inicio</a></li>
-      <li><a href="proyectos.html">Proyectos</a></li>
-      <li><a href="contacto.html">Contacto</a></li>
-    </ul>
-  </nav>
+<nav>
+  <ul>
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="proyectos.html">Proyectos</a></li>
+    <li><a href="contacto.html">Contacto</a></li>
+  </ul>
+</nav>
 
-  <main>
-    <h2 class="texto-centrado">Juega</h2>
-    <p class="texto-centrado">Iphone 13 128GB Open Box</p>
+<main>
+  <h2 class="texto-centrado">Juega</h2>
+  <p class="texto-centrado">Iphone 13 128GB Open Box</p>
+  <img src="img/actividad1.png" alt="actividad1" class="imagen-inicio">
+  <h2 class="texto-centrado2">¡CUPOS LIMITADOS!</h2>
+  <p class="texto-centrado3">¡Números Asignados!</p>
+  <div class="barra-contenedor">
+    <div class="barra-progreso">0.00%</div>
+  </div>
+  <p class="texto-centrado4">📌 El dispositivo se sorteará una vez se hayan vendido todos los números, es decir, cuando la barra de progreso alcance el 100%.</p>
+  <p class="texto-centrado4">🎯 El ganador será determinado tomando los 3 últimos dígitos de la Suertuda Nacional (programa oficial de la Lotería Nacional).</p>
+</main>
 
-    <img src="img/actividad1.png" alt="actividad1" class="imagen-inicio">
-
-    <h2 class="texto-centrado2">¡CUPOS LIMITADOS!</h2>
-    <p class="texto-centrado3">¡Números Asignados!</p>
-    <div class="barra-contenedor">
-  <div class="barra-progreso">0.00%</div>
-</div>
-<p class="texto-centrado4">📌 El dispositivo se sorteará una vez se hayan vendido todos los números, es decir, cuando la barra de progreso alcance el 100%.</p>
-<p class="texto-centrado4">🎯 El ganador será determinado tomando los 3 últimos dígitos de la Suertuda Nacional (programa oficial de la Lotería Nacional).</p>
-  </main>
-  
-  <section class="como-participar">
+<section class="como-participar">
   <h3>¿Cómo participar?</h3>
   <ol>
     <li>Selecciona el combo de números que desees.</li>
@@ -47,92 +63,68 @@
     <li>Revisa el correo electrónico registrado en la pestaña de pago, allí estarán tus números.</li>
   </ol>
 </section>
-<!-- mensaje todos números vendidos -->
+
 <div id="mensaje-completo" style="display: none; text-align: center; font-size: 20px; font-weight: bold; margin-top: 20px; color: red;">
   🎉 ¡Todos los números han sido vendidos!
 </div>
-  
+
 <div id="seccion-combos">
-
-<h3 class="texto-centrado3">¡Adquiere tus números!</h3>
+  <h3 class="texto-centrado3">¡Adquiere tus números!</h3>
   <p class="texto-centrado3">Valor por unidad $1</p>
-  
-<!-- Primera fila: 3 combos -->
-<div class="fila-combos fila-1">
-  <div class="combo-card">
-    <h4>x3 números</h4>
-    <p>$3 (a $1 c/u)</p>
-    <a href="#" class="btn-comprar" onclick="guardarProductoYRedirigir(3)">Comprar</a>
+
+  <div class="fila-combos">
+    <div class="combo-card" data-combo="3">
+      <h4>x3 números</h4>
+      <p>$3 (a $1 c/u)</p>
+      <a href="#" class="btn-comprar">Comprar</a>
+    </div>
+    <div class="combo-card" data-combo="5">
+      <h4>x5 números</h4>
+      <p>$5 (a $1 c/u)</p>
+      <a href="#" class="btn-comprar">Comprar</a>
+    </div>
+    <div class="combo-card" data-combo="10">
+      <h4>x10 números</h4>
+      <p>$10 (a $1 c/u)</p>
+      <a href="#" class="btn-comprar">Comprar</a>
+    </div>
+    <div class="combo-card" data-combo="15">
+      <h4>x15 números</h4>
+      <p>$15 (a $1 c/u)</p>
+      <a href="#" class="btn-comprar">Comprar</a>
+    </div>
+    <div class="combo-card" data-combo="20">
+      <h4>x20 números</h4>
+      <p>$20 (a $1 c/u)</p>
+      <a href="#" class="btn-comprar">Comprar</a>
+    </div>
   </div>
-  <div class="combo-card">
-    <h4>x5 números</h4>
-    <p>$5 (a $1 c/u)</p>
-   <a href="#" class="btn-comprar" onclick="guardarProductoYRedirigir(5)">Comprar</a>
-  </div>
-  <div class="combo-card">
-    <h4>x10 números</h4>
-    <p>$10 (a $1 c/u)</p>
-   <a href="#" class="btn-comprar" onclick="guardarProductoYRedirigir(10)">Comprar</a>
+
+  <div class="extra-card">
+    <h4>¿Más números?</h4>
+    <p>Agrega la cantidad de números que desees.</p>
+    <div class="extra-input">
+      <input type="number" id="cantidad-numeros" min="20" max="200" placeholder="Ej: 25">
+      <button class="btn-comprar" onclick="redirigirCompra()">Comprar</button>
+    </div>
+    <p id="mensaje-error" style="color: red; margin-top: 10px; display: none;"></p>
   </div>
 </div>
 
-<!-- Segunda fila: 2 combos centrados -->
-<div class="fila-combos fila-2">
-  <div class="combo-card">
-    <h4>x15 números</h4>
-    <p>$15 (a $1 c/u)</p>
-    <a href="#" class="btn-comprar" onclick="guardarProductoYRedirigir(15)">Comprar</a>
-  </div>
-  <div class="combo-card">
-    <h4>x20 números</h4>
-    <p>$20 (a $1 c/u)</p>
-    <a href="#" class="btn-comprar" onclick="guardarProductoYRedirigir(20)">Comprar</a>
-  </div>
-</div>
-
-<!-- Tarjeta especial -->
-<div class="extra-card">
-  <h4>¿Más números?</h4>
-  <p>Agrega la cantidad de números que desees.</p>
-  <div class="extra-input">
-  <input type="number" id="cantidad-numeros" min="20" max="200" placeholder="Ej: 25">
-  <button class="btn-comprar" onclick="redirigirCompra()">Comprar</button>
-</div>
-<p id="mensaje-error" style="color: red; margin-top: 10px; display: none;"></p>
-</div>
-
-</div>
-  
-<!-- Botón consultar números -->
 <div style="text-align: center; margin-top: 40px; margin-bottom: 60px;">
-  <a href="misnumeros.html" style="
-    display: inline-block;
-    padding: 15px 30px;
-    font-size: 18px;
-    background-color: #4caf50;
-    color: white;
-    text-decoration: none;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-  " onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.2)'" 
-     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.1)'">
-    🔍 Consultar mis números
-  </a>
+  <a href="misnumeros.html" class="btn-comprar">🔍 Consultar mis números</a>
 </div>
 
 <footer>
   <p>&copy; 2025 Proyecto X. Todos los derechos reservados.</p>
 </footer>
-  
+
 <script>
   async function animarBarraProgreso(valorFinal) {
     const barra = document.querySelector(".barra-progreso");
     let actual = 0;
 
-    if (valorFinal > 100) valorFinal = 100;
-    if (valorFinal < 0) valorFinal = 0;
-
+    valorFinal = Math.min(Math.max(valorFinal, 0), 100);
     barra.style.width = "0%";
     barra.textContent = "0.00%";
     barra.style.justifyContent = "center";
@@ -145,26 +137,10 @@
         actual++;
         barra.style.width = actual + "%";
         barra.textContent = actual.toFixed(2) + "%";
-
-        if (actual < 40) {
-          barra.style.backgroundColor = "#f44336";
-          barra.style.color = "#fff";
-        } else if (actual < 70) {
-          barra.style.backgroundColor = "#ffc107";
-          barra.style.color = "#000";
-        } else {
-          barra.style.backgroundColor = "#4caf50";
-          barra.style.color = "#fff";
-        }
-
-        // Centrado solo al inicio
-        if (actual === 0) {
-          barra.style.justifyContent = "center";
-          barra.style.paddingLeft = "0";
-        } else {
-          barra.style.justifyContent = "flex-start";
-          barra.style.paddingLeft = "10px";
-        }
+        barra.style.backgroundColor = actual < 40 ? "#f44336" : actual < 70 ? "#ffc107" : "#4caf50";
+        barra.style.color = actual < 40 ? "#fff" : actual < 70 ? "#000" : "#fff";
+        barra.style.justifyContent = actual === 0 ? "center" : "flex-start";
+        barra.style.paddingLeft = actual === 0 ? "0" : "10px";
       }
     }, 20);
   }
@@ -174,19 +150,12 @@
     try {
       const res = await fetch("https://backend-proyecto-x.onrender.com/progreso");
       const data = await res.json();
-
-      const vendidos = data.totalNumeros || 0;
-      const total = 1000;
-      const porcentaje = Math.round((vendidos / total) * 100);
-
+      const porcentaje = Math.round((data.totalNumeros || 0) / 1000 * 100);
       animarBarraProgreso(porcentaje);
-
-        // Mostrar mensaje y ocultar combos si ya se completó
-    if (porcentaje >= 100) {
-      document.getElementById("seccion-combos").style.display = "none";
-      document.getElementById("mensaje-completo").style.display = "block";
-    }
-      
+      if (porcentaje >= 100) {
+        document.getElementById("seccion-combos").style.display = "none";
+        document.getElementById("mensaje-completo").style.display = "block";
+      }
     } catch (err) {
       console.error("Error al obtener progreso:", err);
       barra.textContent = "Error";
@@ -194,11 +163,6 @@
     }
   }
 
-  window.addEventListener("DOMContentLoaded", obtenerYAnimarBarra);
-</script>
-
-
-<script>
   function redirigirCompra() {
     const input = document.getElementById("cantidad-numeros");
     const mensaje = document.getElementById("mensaje-error");
@@ -215,16 +179,20 @@
       window.location.href = `pago.html?combo=${valor}`;
     }
   }
+
+  document.querySelectorAll('.combo-card').forEach(card => {
+    card.querySelector('.btn-comprar').addEventListener('click', () => {
+      const combo = card.dataset.combo;
+      const producto = document.querySelector(".texto-centrado + p").textContent.trim();
+      localStorage.setItem("productoSeleccionado", producto);
+      localStorage.setItem("comboSeleccionado", combo);
+      window.location.href = `pago.html?combo=${combo}`;
+    });
+  });
+
+  window.addEventListener("DOMContentLoaded", obtenerYAnimarBarra);
 </script>
-  
-<script>
-  function guardarProductoYRedirigir(combo) {
-    const producto = document.querySelector(".texto-centrado + p").textContent.trim();
-    localStorage.setItem("productoSeleccionado", producto);
-    localStorage.setItem("comboSeleccionado", combo);
-    window.location.href = `pago.html?combo=${combo}`;
-  }
-</script>
-  
+
 </body>
 </html>
+
