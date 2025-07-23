@@ -14,13 +14,12 @@
       flex-direction: column;
       align-items: center;
     }
-
     h1 {
       font-size: 30px;
       text-align: center;
       margin-bottom: 30px;
+      color: #4CAF50;
     }
-
     .cuadro {
       background-color: white;
       border: 1px solid #ddd;
@@ -30,107 +29,90 @@
       width: 100%;
       max-width: 700px;
     }
-
     .fila-datos {
       display: flex;
       justify-content: space-between;
       margin-bottom: 10px;
     }
-
     .titulo-cuadro {
       font-weight: bold;
       margin-bottom: 10px;
       font-size: 1.1em;
     }
-
     .tabla {
       width: 100%;
       border-collapse: collapse;
     }
-
     .tabla th, .tabla td {
       padding: 8px;
       text-align: left;
       border-bottom: 1px solid #ddd;
     }
-
     .tabla th {
       background-color: #f2f2f2;
     }
-
     #whatsapp-float {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 1000;
-}
-
-#whatsapp-float img {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  transition: transform 0.3s ease;
-}
-
-#whatsapp-float img:hover {
-  transform: scale(1.1);
-}
-
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+    #whatsapp-float img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+    }
+    #whatsapp-float img:hover {
+      transform: scale(1.1);
+    }
+    .btn-inicio {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background-color: #1a1a1a;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 16px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      transition: background-color 0.3s, transform 0.2s;
+      z-index: 1000;
+    }
   </style>
 </head>
 <body>
 
-  <h1 style="color: #4CAF50;">¡Gracias! Tu compra ha sido recibida.</h1>
+  <h1>¡Gracias! Tu compra ha sido recibida.</h1>
 
-  <!-- Cuadro de resumen del pedido -->
   <div class="cuadro" id="cuadro-resumen"></div>
-
-  <!-- Cuadro de instrucciones de pago -->
   <div class="cuadro">
     <div class="titulo-cuadro">Instrucciones de Pago:</div>
-    <p>
-  1. Realiza una captura de pantalla al 
-  <strong style="color: red;">número de pedido</strong> 
-  (en la parte superior izquierda).
-</p>
-    <p>2. Transfiere o deposita EL MONTO TOTAL de la compra, tienes un tiempo máximo de 1 hora para enviar el comprobante y número de pedido A WHATSAPP o tu TU PEDIDO SE CANCELARÁ Y NO SE HARÁN REEMBOLSOS. Si ya realizaste el pago y aún no te respondemos, no te preocupes, tu pedido no se cancelará.</p>
+    <p>1. Realiza una captura de pantalla al <strong style="color: red;">número de pedido</strong> (en la parte superior izquierda).</p>
+    <p>2. Transfiere o deposita EL MONTO TOTAL de la compra, tienes un tiempo máximo de 1 hora para enviar el comprobante y número de pedido A WHATSAPP o tu PEDIDO SE CANCELARÁ Y NO SE HARÁN REEMBOLSOS. Si ya realizaste el pago y aún no te respondemos, no te preocupes, tu pedido no se cancelará.</p>
     <p>3. Envíanos el COMPROBANTE DE PAGO Y NÚMERO DE PEDIDO (esquina superior izquierda de esta pantalla) por WhatsApp al +593983714315 O NO SE GENERARÁN TUS NÚMEROS.</p>
-    <p>4. Recibirás tus números por correo electrónico una vez verificado el pago. (Recuerda, esto puede tardar en caso de transferencias interbancarias o en horas pico). </p>
+    <p>4. Recibirás tus números por correo electrónico una vez verificado el pago. (Recuerda, esto puede tardar en caso de transferencias interbancarias o en horas pico).</p>
     <div class="titulo-cuadro">Números de cuenta:</div>
-    <!-- Información de cuenta bancaria -->
-<div style="margin-top: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 10px; background-color: #f9f9f9; max-width: 500px; margin-left: auto; margin-right: auto; text-align: center;">
-
-  <img src="img/logo_bcpich.png"
-       alt="Banco Pichincha Logo" 
-       style="max-width: 150px; height: auto; margin-bottom: 10px;" />
-
-  <p style="margin: 5px 0;"><strong>Banco:</strong> Banco Pichincha</p>
-  <p style="margin: 5px 0;"><strong>Tipo de cuenta:</strong> Cuenta de ahorros</p>
-  <p style="margin: 5px 0;"><strong>Número de cuenta:</strong> 7700056444</p>
-  <p style="margin: 5px 0;"><strong>A nombre de:</strong> Tomala Correa Jair Valentino</p>
-  <p style="margin: 5px 0;"><strong>Cédula/RUC:</strong> 0956671705</p>
-
-  <img src="img/logo_bcgye.png"
-       alt="Banco Guayaquil Logo" 
-       style="max-width: 150px; height: auto; margin-bottom: 10px;" />
-
-  <p style="margin: 5px 0;"><strong>Banco:</strong> Banco Guayaquil</p>
-  <p style="margin: 5px 0;"><strong>Tipo de cuenta:</strong> Cuenta de ahorros</p>
-  <p style="margin: 5px 0;"><strong>Número de cuenta:</strong> 0126670920</p>
-  <p style="margin: 5px 0;"><strong>A nombre de:</strong> Tomala Correa Jair Valentino</p>
-  <p style="margin: 5px 0;"><strong>Cédula/RUC:</strong> 0956671705</p>
-    
+    <div style="margin-top: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 10px; background-color: #f9f9f9; max-width: 500px; margin: auto; text-align: center;">
+      <img src="img/logo_bcpich.png" alt="Banco Pichincha Logo" style="max-width: 150px; height: auto; margin-bottom: 10px;" />
+      <p><strong>Banco:</strong> Banco Pichincha</p>
+      <p><strong>Tipo de cuenta:</strong> Cuenta de ahorros</p>
+      <p><strong>Número de cuenta:</strong> 7700056444</p>
+      <p><strong>A nombre de:</strong> Tomala Correa Jair Valentino</p>
+      <p><strong>Cédula/RUC:</strong> 0956671705</p>
+      <img src="img/logo_bcgye.png" alt="Banco Guayaquil Logo" style="max-width: 150px; height: auto; margin-bottom: 10px;" />
+      <p><strong>Banco:</strong> Banco Guayaquil</p>
+      <p><strong>Tipo de cuenta:</strong> Cuenta de ahorros</p>
+      <p><strong>Número de cuenta:</strong> 0126670920</p>
+      <p><strong>A nombre de:</strong> Tomala Correa Jair Valentino</p>
+      <p><strong>Cédula/RUC:</strong> 0956671705</p>
     </div>
-</div>
+  </div>
 
-  <!-- Cuadro de detalles del pedido -->
   <div class="cuadro" id="cuadro-detalles"></div>
-
-  <!-- Cuadro de dirección de facturación -->
   <div class="cuadro" id="cuadro-facturacion"></div>
-
-  <!-- Cuadro de tus números -->
   <div class="cuadro">
     <div class="titulo-cuadro">Tus Números</div>
     <p>Serán generados una vez que verificado el pago. Recuerda, esto puede tardar ya que la verificación de pago es manual. Por favor, sigue las instrucciones detalladas en el apartado "Instrucciones de pago".</p>
@@ -138,116 +120,97 @@
 
   <script>
     const datos = JSON.parse(localStorage.getItem("datosCompra")) || {};
-    if (datos.metodo === "transferencia") {
-  datos.metodo = "Transferencia/Depósito";
-}
+    datos.metodo = datos.metodo === "transferencia" ? "Transferencia/Depósito" : datos.metodo;
 
     const pedidoID = "PX" + Math.floor(100000 + Math.random() * 900000);
-    const fecha = new Date();
-    const fechaCompra = fecha.toLocaleDateString('es-ES', {
+    const fechaCompra = new Date().toLocaleDateString('es-ES', {
       weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-      
     });
 
-    // Cuadro resumen
-    document.getElementById("cuadro-resumen").innerHTML = `
-      <div class="titulo-cuadro">Resumen del Pedido</div>
-     <div class="fila-datos">
-  <span><strong>Nº Pedido:</strong> <span style="color: red;">${pedidoID}</span></span>
-  <span><strong>Fecha:</strong> ${fechaCompra}</span>
-</div>
-    <div class="fila-datos">
-  <span><strong>Combo seleccionado:</strong> ${datos.combo || "-"}</span>
-</div>
+    function renderResumen() {
+      document.getElementById("cuadro-resumen").innerHTML = `
+        <div class="titulo-cuadro">Resumen del Pedido</div>
+        <div class="fila-datos">
+          <span><strong>Nº Pedido:</strong> <span style="color: red;">${pedidoID}</span></span>
+          <span><strong>Fecha:</strong> ${fechaCompra}</span>
+        </div>
+        <div class="fila-datos">
+          <span><strong>Combo seleccionado:</strong> ${datos.combo || "-"}</span>
+        </div>
+        <div class="fila-datos">
+          <span><strong>Cliente:</strong> ${datos.nombre || ""} ${datos.apellido || ""}</span>
+          <span><strong>Total:</strong> $${datos.total || "0.00"}</span>
+        </div>
+        <div><strong>Método de Pago:</strong> ${datos.metodo || "-"}</div>
+      `;
+    }
 
-      <div class="fila-datos">
-        <span><strong>Cliente:</strong> ${datos.nombre || ""} ${datos.apellido || ""}</span>
-        <span><strong>Total:</strong> $${datos.total || "0.00"}</span>
-      </div>
-      <div><strong>Método de Pago:</strong> ${datos.metodo || "-"}</div>
-    `;
+    function renderDetalles() {
+      document.getElementById("cuadro-detalles").innerHTML = `
+        <div class="titulo-cuadro">Detalles del Pedido</div>
+        <table class="tabla">
+          <tr><th>Producto</th><th>Total</th></tr>
+          <tr>
+            <td>${localStorage.getItem("productoSeleccionado") || "Producto en sorteo"} (Combo ${datos.combo || "-"})</td>
+            <td>$${datos.total || "0.00"}</td>
+          </tr>
+          <tr><td>Subtotal</td><td>$${datos.total || "0.00"}</td></tr>
+          <tr><td>Método de pago</td><td>${datos.metodo || "-"}</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>$${datos.total || "0.00"}</strong></td></tr>
+        </table>
+      `;
+    }
 
-    // Cuadro detalles
-    document.getElementById("cuadro-detalles").innerHTML = `
-      <div class="titulo-cuadro">Detalles del Pedido</div>
-      <table class="tabla">
-        <tr><th>Producto</th><th>Total</th></tr>
-        <tr>
-  <td>${localStorage.getItem("productoSeleccionado") || "Producto en sorteo"} (Combo ${datos.combo || "-"})</td>
-  <td>$${datos.total || "0.00"}</td>
-</tr>
-        <tr><td>Subtotal</td><td>$${datos.total || "0.00"}</td></tr>
-        <tr><td>Método de pago</td><td>${datos.metodo || "-"}</td></tr>
-        <tr><td><strong>Total</strong></td><td><strong>$${datos.total || "0.00"}</strong></td></tr>
-      </table>
-    `;
+    function renderFacturacion() {
+      document.getElementById("cuadro-facturacion").innerHTML = `
+        <div class="titulo-cuadro">Dirección de Facturación</div>
+        <p><strong>Nombre:</strong> ${datos.nombre || ""} ${datos.apellido || ""}</p>
+        <p><strong>Correo:</strong> ${datos.correo || ""}</p>
+        <p><strong>Teléfono:</strong> ${datos.telefono || ""}</p>
+        <p><strong>Provincia:</strong> ${datos.provincia || ""}</p>
+        <p><strong>Ciudad:</strong> ${datos.ciudad || ""}</p>
+        <p><strong>Dirección:</strong> ${datos.direccion || ""}</p>
+      `;
+    }
 
-    // Cuadro facturación
-    document.getElementById("cuadro-facturacion").innerHTML = `
-      <div class="titulo-cuadro">Dirección de Facturación</div>
-      <p><strong>Nombre:</strong> ${datos.nombre || ""} ${datos.apellido || ""}</p>
-      <p><strong>Correo:</strong> ${datos.correo || ""}</p>
-      <p><strong>Teléfono:</strong> ${datos.telefono || ""}</p>
-      <p><strong>Provincia:</strong> ${datos.provincia || ""}</p>
-      <p><strong>Ciudad:</strong> ${datos.ciudad || ""}</p>
-      <p><strong>Dirección:</strong> ${datos.direccion || ""}</p>
-    `;
+    function sendConfirmation() {
+      fetch("https://backend-proyecto-x.onrender.com/guardar-confirmacion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          codigo: pedidoID,
+          nombre: datos.nombre || "",
+          telefono: datos.telefono || "",
+          ciudad: datos.ciudad || "",
+          combo: datos.combo || "",
+          correo: datos.correo || ""
+        })
+      })
+      .then(res => res.json())
+      .then(res => console.log("✅ Datos de confirmación guardados:", res))
+      .catch(err => console.error("❌ Error al guardar datos en backend:", err));
+    }
 
-    // Enviar datos al backend para guardarlos
-    fetch("https://backend-proyecto-x.onrender.com/guardar-confirmacion", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    codigo: pedidoID,
-    nombre: datos.nombre || "",
-    telefono: datos.telefono || "",
-    ciudad: datos.ciudad || "",
-    combo: datos.combo || "",
-    correo: datos.correo || ""
-  })
-})
-.then(res => res.json())
-.then(res => console.log("✅ Datos de confirmación guardados:", res))
-.catch(err => console.error("❌ Error al guardar datos en backend:", err));
-    
+    renderResumen();
+    renderDetalles();
+    renderFacturacion();
+    sendConfirmation();
+
+    window.addEventListener("beforeunload", function (e) {
+      e.preventDefault();
+      e.returnValue = "¿Estás seguro de que deseas salir o recargar esta página?";
+    });
+
+    if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
+      window.location.href = "index.html";
+    }
   </script>
-    
-<!-- Burbuja flotante de WhatsApp -->
-<a href="https://wa.me/593981279614?text=Hola%2C%20Proyecto%20X%20mi%20número%20de%20pedido%20es%20...." target="_blank" id="whatsapp-float">
-  <img src="img/whatsapp.png" alt="WhatsApp" />
-</a>
 
-<script>
+  <a href="https://wa.me/593981279614?text=Hola%2C%20Proyecto%20X%20mi%20número%20de%20pedido%20es%20...." target="_blank" id="whatsapp-float">
+    <img src="img/whatsapp.png" alt="WhatsApp" />
+  </a>
 
-  //NO RECARGAR PÁGINA
-<script>
-  window.addEventListener("beforeunload", function (e) {
-    e.preventDefault();
-    e.returnValue = "¿Estás seguro de que deseas salir o recargar esta página?";
-  });
+  <a href="index.html" class="btn-inicio">🏠 Inicio</a>
 
-  // Detectar si se volvió a cargar para redirigir (opcional, experimental)
-  if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
-    window.location.href = "index.html";
-  }
-</script>
-
-<a href="index.html" style="
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  background-color: #1a1a1a;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 30px;
-  text-decoration: none;
-  font-size: 16px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-  transition: background-color 0.3s, transform 0.2s;
-  z-index: 1000;
-">🏠 Inicio</a>
-  
 </body>
 </html>
