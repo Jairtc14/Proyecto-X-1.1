@@ -742,7 +742,11 @@
             setTimeout(() => {
                 button.innerHTML = '✅ ¡Completado!';
                 setTimeout(() => {
-                    window.location.href = 'confirmacion.html';
+                    if (metodo === "efectivo") {
+                        window.location.href = 'efectivo.html';
+                    } else {
+                        window.location.href = 'confirmacion.html';
+                    }
                 }, 1000);
             }, 2000);
             }
