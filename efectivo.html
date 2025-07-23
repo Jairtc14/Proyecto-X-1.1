@@ -38,6 +38,18 @@
       margin-bottom: 20px;
       border-radius: 5px;
     }
+    #codigoConfirmacion {
+      font-size: 1.5em;
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+      color: #1e90ff;
+    }
+    .error {
+      color: red;
+      margin-top: 15px;
+      text-align: center;
+    }
     @media (max-width: 600px) {
       .container {
         padding: 15px;
@@ -65,40 +77,23 @@
     <div class="dato">💳 Método de pago: <span id="metodo"></span></div>
     <div class="dato">🎟️ Combo seleccionado: <span id="combo"></span></div>
     <div class="dato">💰 Total a pagar: <span id="total"></span></div>
+
+    <div id="codigoConfirmacion"></div>
+    <div id="errorGuardar" class="error"></div>
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const datos = JSON.parse(localStorage.getItem("datosCompra"));
-
-      if (datos) {
-        document.getElementById("nombre").textContent = datos.nombre + " " + datos.apellido;
-        document.getElementById("correo").textContent = datos.correo;
-        document.getElementById("telefono").textContent = datos.telefono;
-        document.getElementById("ciudad").textContent = datos.ciudad;
-        document.getElementById("provincia").textContent = datos.provincia;
-        document.getElementById("direccion").textContent = datos.direccion;
-        document.getElementById("metodo").textContent = datos.metodo;
-        document.getElementById("combo").textContent = datos.combo + " números";
-        document.getElementById("total").textContent = "$" + datos.total;
-      } else {
-        alert("No se encontraron datos de compra.");
-        window.location.href = "index.html";
-      }
-    });
-
-        // Guardar datos
     document.addEventListener("DOMContentLoaded", async () => {
       const datos = JSON.parse(localStorage.getItem("datosCompra"));
-    
+
       if (!datos) {
         alert("No se encontraron datos de compra.");
         window.location.href = "index.html";
         return;
       }
-    
+
       // Mostrar datos en pantalla
-      document.getElementById("nombre").textContent = datos.nombre + " " + datos.apellido;
+      document.getElementById("nombre").textContent = datos.nombre + " " + (datos.apellido || "");
       document.getElementById("correo").textContent = datos.correo;
       document.getElementById("telefono").textContent = datos.telefono;
       document.getElementById("ciudad").textContent = datos.ciudad;
@@ -107,59 +102,58 @@
       document.getElementById("metodo").textContent = datos.metodo;
       document.getElementById("combo").textContent = datos.combo + " números";
       document.getElementById("total").textContent = "$" + datos.total;
-    
+
       if (localStorage.getItem("confirmacionGuardada") === "true") {
-        console.log("La confirmación ya fue guardada.");
+        document.getElementById("codigoConfirmacion").textContent = "Código de confirmación ya generado: " + (datos.codigo || "");
         return;
       }
-    
-      // Generar código único tipo "EF1234"
+
+      // Función para generar código único tipo "EF1234"
       async function generarCodigoUnico() {
         const generar = () => {
           const num = Math.floor(1000 + Math.random() * 9000);
           return "EF" + num;
         };
-    
+
         let codigo;
         let existe = true;
-    
+
         while (existe) {
           codigo = generar();
-          // Consulta al backend si el código ya existe
           const res = await fetch(`https://backend-proyecto-x.onrender.com/codigo-existe/${codigo}`);
           const data = await res.json();
-          existe = data.existe; // true si ya existe
+          existe = data.existe;
         }
-    
         return codigo;
       }
-    
-      const codigoGenerado = await generarCodigoUnico();
-      datos.codigo = codigoGenerado;
-    
-      // Mostrar el código en pantalla
-      const codigoDiv = document.createElement("div");
-      codigoDiv.innerHTML = `<p><strong>Código de confirmación:</strong> <span style="font-size: 1.5em;">${codigoGenerado}</span></p>`;
-      document.body.appendChild(codigoDiv); // O ponlo en un div específico si ya lo tienes
-    
-      // Enviar al backend
-      fetch("https://backend-proyecto-x.onrender.com/guardar-confirmacion", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(datos),
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log("Guardado con éxito:", data);
-          localStorage.setItem("confirmacionGuardada", "true");
-        })
-        .catch(error => {
-          console.error("Error al guardar:", error);
-        });
-    });
 
+      try {
+        const codigoGenerado = await generarCodigoUnico();
+        datos.codigo = codigoGenerado;
+
+        // Mostrar código en pantalla
+        document.getElementById("codigoConfirmacion").textContent = "Código de confirmación: " + codigoGenerado;
+
+        // Enviar datos al backend
+        const response = await fetch("https://backend-proyecto-x.onrender.com/guardar-confirmacion", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(datos),
+        });
+
+        const resultado = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem("confirmacionGuardada", "true");
+          console.log("Guardado con éxito:", resultado);
+        } else {
+          document.getElementById("errorGuardar").textContent = resultado.error || "Error al guardar confirmación.";
+        }
+      } catch (error) {
+        document.getElementById("errorGuardar").textContent = "Error al comunicarse con el servidor.";
+        console.error("Error al guardar confirmación:", error);
+      }
+    });
   </script>
 </body>
 </html>
