@@ -5,6 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- MUY IMPORTANTE -->
   <title>Proyectos - SORTECH</title>
   <link rel="stylesheet" href="css/estilos.css">
+
+<style>
+  .proyecto {
+  position: relative;
+  overflow: hidden; /* importante para que no recorte la etiqueta */
+}
+
+.etiqueta-sorteado {
+  position: absolute;
+  top: 15px;
+  right: -50px;
+  width: 200px;
+  background-color: red;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  transform: rotate(45deg);
+  z-index: 10;
+  padding: 10px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  border-radius: 4px;
+}
+
+.etiqueta-proximamente{
+    position: absolute;
+  top: 25px;
+  right: -50px;
+  width: 200px;
+  background-color: rgb(43, 159, 30);
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  transform: rotate(45deg);
+  z-index: 10;
+  padding: 15px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  border-radius: 4px;
+}
+
+</style>
+
+
 </head>
 <body>
 
@@ -26,6 +72,7 @@
   <h2>Proyectos destacados</h2>
   <div class="proyectos">
     <div class="proyecto">
+    <div class="etiqueta-sorteado"> SORTEADO</div>
       <img src="img/celular1.jpg" alt="celular 1">
       <h3>Tecno Spark Go 2024</h3>
       <p>🎉 ¡Conoce el nuevo Tecno Spark Go 2024!</p>
@@ -37,6 +84,7 @@
     </div>
 
     <div class="proyecto">
+        <div class="etiqueta-proximamente">PROXIMAMENTE</div>
       <img src="img/celular2.jpg" alt="celular 2">
       <h3>Xiaomi Redmi Note 14</h3>
       <p>🎉 Descubre el poder del Xiaomi Redmi Note 14</p>
@@ -50,9 +98,8 @@
   </main>
 
   <footer>
-    <p>&copy; 2025 Proyecto X. Todos los derechos reservados.</p>
+    <p>&copy; 2025 Sortech-ec. Todos los derechos reservados.</p>
   </footer>
 
 </body>
 </html>
-
