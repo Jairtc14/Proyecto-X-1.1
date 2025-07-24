@@ -503,7 +503,7 @@
     window.addEventListener("beforeunload", function (e) {
       e.preventDefault();
       e.returnValue = "¿Estás seguro de que deseas salir o recargar esta página?";
-      )};
+    });
 
     if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
       window.location.href = "index.html";
