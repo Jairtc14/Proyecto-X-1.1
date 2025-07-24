@@ -62,10 +62,10 @@
 </head>
 <body>
   <div class="container">
-    <h2>Pago en Efectivo</h2>
+    <h2>💵 Pago en Efectivo</h2>
 
     <div class="alerta">
-      Recuerda que tu reserva será válida por 24 horas. Debes realizar el pago en el punto autorizado más cercano.
+      ⚠️ Recuerda que tu reserva será válida por 24 horas. Debes realizar el pago con uno de los administradores autorizados.
     </div>
 
     <div class="dato">👤 Nombre completo: <span id="nombre"></span></div>
@@ -154,6 +154,18 @@
         console.error("Error al guardar confirmación:", error);
       }
     });
-  </script>
+
+    // NO CARGAR LA PAGINA
+  window.addEventListener("beforeunload", function (e) {
+    e.preventDefault();
+    e.returnValue = "¿Estás seguro de que deseas salir o recargar esta página?";
+  });
+
+  // Detectar si se volvió a cargar para redirigir (opcional, experimental)
+  if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
+    window.location.href = "index.html";
+  }
+</script>
+  
 </body>
 </html>
