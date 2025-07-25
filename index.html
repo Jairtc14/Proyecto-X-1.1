@@ -127,20 +127,32 @@
     valorFinal = Math.min(Math.max(valorFinal, 0), 100);
     barra.style.width = "0%";
     barra.textContent = "0.00%";
-    barra.style.justifyContent = "center";
+    barra.style.justifyContent = actual === 0 ? "center" : "flex-end";
     barra.style.paddingLeft = "0";
+    barra.style.paddingRight = actual === 0 ? "0" : "10px";
 
     const animar = setInterval(() => {
       if (actual >= valorFinal) {
         clearInterval(animar);
       } else {
-        actual++;
+        actual += valorFinal / 100; // Incremento proporcional para suavidad
+        if (actual > valorFinal) actual = valorFinal; // No exceder el valor final
+        
         barra.style.width = actual + "%";
         barra.textContent = actual.toFixed(2) + "%";
         barra.style.backgroundColor = actual < 40 ? "#f44336" : actual < 70 ? "#ffc107" : "#4caf50";
         barra.style.color = actual < 40 ? "#fff" : actual < 70 ? "#000" : "#fff";
-        barra.style.justifyContent = actual === 0 ? "center" : "flex-start";
-        barra.style.paddingLeft = actual === 0 ? "0" : "10px";
+        
+        // El texto se mueve con la barra - al inicio centrado, luego al final de la barra
+        if (actual <= 5) {
+          barra.style.justifyContent = "center";
+          barra.style.paddingLeft = "0";
+          barra.style.paddingRight = "0";
+        } else {
+          barra.style.justifyContent = "flex-end";
+          barra.style.paddingLeft = "0";
+          barra.style.paddingRight = "10px";
+        }
       }
     }, 20);
   }
@@ -195,4 +207,3 @@
 
 </body>
 </html>
-
