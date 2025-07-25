@@ -430,6 +430,17 @@
       }
     }
 
+    // Función para notificar a la página principal sobre la actualización
+    function notificarActualizacionBarra() {
+      // Crear un evento personalizado para comunicar entre ventanas
+      if (window.opener && !window.opener.closed) {
+        window.opener.postMessage({ tipo: 'actualizarBarra' }, '*');
+      }
+      
+      // También guardamos una marca de tiempo en localStorage para páginas que se abran después
+      localStorage.setItem('ultimaActualizacionBarra', Date.now().toString());
+    }
+
     async function confirmarCodigo() {
       const codigo = document.getElementById("codigo-confirmar").value.trim();
       const resultadoDiv = document.getElementById("resultado-confirmacion");
@@ -461,6 +472,10 @@
           <p><strong>Combo:</strong> ${data.combo}</p>
           <p style="color:#00ff00">✅ Correo enviado exitosamente</p>
         `;
+
+        // AQUÍ SE ACTUALIZA LA BARRA DESPUÉS DE CONFIRMAR EXITOSAMENTE
+        notificarActualizacionBarra();
+        
       } catch (err) {
         resultadoDiv.innerHTML = "<p style='color:#ff4444'>Error al conectar con el servidor</p>";
       }
