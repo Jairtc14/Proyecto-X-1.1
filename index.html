@@ -211,14 +211,13 @@
 
   // Verificar si hubo una actualización reciente al cargar la página
   window.addEventListener("DOMContentLoaded", () => {
+    // SIEMPRE actualizar la barra al cargar la página
+    obtenerYAnimarBarra();
+    
+    // También verificar actualizaciones recientes para sincronización
     const ultimaActualizacion = localStorage.getItem('ultimaActualizacionBarra');
     if (ultimaActualizacion) {
-      const tiempoTranscurrido = Date.now() - parseInt(ultimaActualizacion);
-      // Si la actualización fue hace menos de 30 segundos, actualizar la barra
-      if (tiempoTranscurrido < 30000) {
-        obtenerYAnimarBarra();
-        localStorage.removeItem('ultimaActualizacionBarra'); // Limpiar después de usar
-      }
+      localStorage.removeItem('ultimaActualizacionBarra'); // Limpiar después de cargar
     }
   });
 </script>
