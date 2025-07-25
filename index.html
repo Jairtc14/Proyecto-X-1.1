@@ -202,7 +202,25 @@
     });
   });
 
-  window.addEventListener("DOMContentLoaded", obtenerYAnimarBarra);
+  // Escuchar mensajes de otras ventanas (página admin)
+  window.addEventListener('message', (event) => {
+    if (event.data && event.data.tipo === 'actualizarBarra') {
+      obtenerYAnimarBarra();
+    }
+  });
+
+  // Verificar si hubo una actualización reciente al cargar la página
+  window.addEventListener("DOMContentLoaded", () => {
+    const ultimaActualizacion = localStorage.getItem('ultimaActualizacionBarra');
+    if (ultimaActualizacion) {
+      const tiempoTranscurrido = Date.now() - parseInt(ultimaActualizacion);
+      // Si la actualización fue hace menos de 30 segundos, actualizar la barra
+      if (tiempoTranscurrido < 30000) {
+        obtenerYAnimarBarra();
+        localStorage.removeItem('ultimaActualizacionBarra'); // Limpiar después de usar
+      }
+    }
+  });
 </script>
 
 </body>
