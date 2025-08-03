@@ -48,6 +48,15 @@
       100% { content: "⏳ Cargando..."; }
     }
 
+    .parpadeo {
+      animation: parpadeo 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes parpadeo {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
   </style>
 </head>
 <body>
@@ -213,7 +222,7 @@ function actualizarDisponibilidad(numerosDisponibles) {
     seccionCombos.style.display = 'block';
   }
 
-  // Actualizar texto con cantidad disponible (puedes crear un elemento <p> para esto)
+  // Crear o actualizar texto de disponibles
   let textoDisponibles = document.getElementById('texto-disponibles');
   if (!textoDisponibles) {
     textoDisponibles = document.createElement('p');
@@ -224,8 +233,17 @@ function actualizarDisponibilidad(numerosDisponibles) {
     textoDisponibles.style.color = '#b91c1c'; // rojo oscuro
     seccionCombos.insertBefore(textoDisponibles, seccionCombos.querySelector('.fila-combos'));
   }
-  textoDisponibles.textContent = `📢 Quedan solo ${numerosDisponibles} número${numerosDisponibles > 1 ? 's' : ''} disponibles`;
 
+  // Mostrar cantidad disponible solo si hay 30 o menos
+  if (numerosDisponibles <= 30) {
+    textoDisponibles.textContent = `📢 ¡Quedan solo ${numerosDisponibles} número${numerosDisponibles !== 1 ? 's' : ''} disponibles!`;
+    textoDisponibles.classList.add('parpadeo');
+  } else {
+    textoDisponibles.textContent = ''; // limpia el texto
+    textoDisponibles.classList.remove('parpadeo');
+  }
+
+  // Activar/desactivar combos según la cantidad disponible
   combos.forEach(card => {
     const comboValue = parseInt(card.dataset.combo);
     if (comboValue > numerosDisponibles) {
@@ -318,6 +336,7 @@ function actualizarDisponibilidad(numerosDisponibles) {
 
 </body>
 </html>
+
 
 
 
