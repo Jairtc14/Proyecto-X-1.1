@@ -193,7 +193,7 @@
       const producto = document.querySelector(".texto-centrado + p").textContent.trim();
       localStorage.setItem("productoSeleccionado", producto);
       localStorage.setItem("comboSeleccionado", valor);
-      window.location.href = `pago.html?combo=${valor}`;
+      window.location.href = `/datos?combo=${valor}`;
     }
   }
 
