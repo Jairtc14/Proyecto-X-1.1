@@ -222,6 +222,12 @@ function actualizarDisponibilidad(numerosDisponibles) {
 // Barra de Porcentaje
   async function obtenerYAnimarBarra() {
   const barra = document.querySelector(".barra-progreso");
+    
+    // Mostrar mensaje de carga antes del fetch
+  barra.style.width = "0%";
+  barra.style.backgroundColor = "#ccc"; // color gris mientras carga
+  progresoTexto.textContent = "⏳ Cargando...";
+    
   try {
     const res = await fetch("https://backend-proyecto-x.onrender.com/progreso");
     const data = await res.json();
@@ -292,4 +298,5 @@ function actualizarDisponibilidad(numerosDisponibles) {
 
 </body>
 </html>
+
 
