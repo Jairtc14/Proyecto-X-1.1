@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Pago</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: white;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        header {
+            background-color: #1a1a1a;
+            padding: 20px 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-sortech {
+            height: 50px;
+            width: auto;
+        }
+
+        .main-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .payment-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: #1a1a1a;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: left;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group.full-width {
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        input:hover, select:hover {
+            border-color: #667eea;
+            background: white;
+        }
+
+        /* Estilos para la sección de detalles de compra */
+        .purchase-details {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .purchase-details h3 {
+            color: #333;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .purchase-info {
+            margin-bottom: 25px;
+        }
+
+        .purchase-info p {
+            margin: 10px 0;
+            font-size: 1.1em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .purchase-info p strong {
+            color: #333;
+        }
+
+        .total-amount {
+            font-size: 1.3em !important;
+            font-weight: bold !important;
+            color: #667eea !important;
+            border-top: 2px solid #e1e5e9;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .delivery-info {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #2196f3;
+            margin-top: 20px;
+        }
+
+        .delivery-info p {
+            color: #1976d2;
+            font-size: 0.95em;
+            margin: 0;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .divider {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            margin: 25px 0;
+        }
+
+        .payment-method-section {
+            margin: 30px 0;
+        }
+
+        .payment-method-section h4 {
+            color: #333;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .payment-button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+
+        .payment-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .payment-button:active {
+            transform: translateY(-1px);
+        }
+
+        .security-info {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+        }
+
+        .security-info .shield {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        /* Estilos para términos y condiciones */
+        .terms-section {
+            margin: 25px 0;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .checkbox-label {
+            font-size: 0.95em;
+            color: #333;
+            line-height: 1.4;
+            cursor: pointer;
+            text-transform: none;
+            letter-spacing: normal;
+            font-weight: normal;
+        }
+
+        .terms-link {
+            color: #2196f3;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .terms-link:hover {
+            color: #1976d2;
+        }
+
+        .terms-card {
+            background: white;
+            border: 2px solid #e1e5e9;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            margin-top: 15px;
+            overflow: hidden;
+            transform: translateY(-20px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 0;
+        }
+
+        .terms-card.show {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+            max-height: 600px;
+        }
+
+        .terms-header {
+            background: linear-gradient(to right, #1e90ff, #ff69b4);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .terms-header h4 {
+            margin: 0;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .close-terms {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .close-terms:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .terms-content {
+            padding: 25px;
+            max-height: 400px;
+            overflow-y: auto;
+            line-height: 1.6;
+        }
+
+        .terms-content h5 {
+            color: #333;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin: 20px 0 10px 0;
+            border-left: 3px solid #667eea;
+            padding-left: 10px;
+        }
+
+        .terms-content h5:first-child {
+            margin-top: 0;
+        }
+
+        .terms-content p {
+            color: #666;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .terms-content small {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Scrollbar personalizada para el contenido de términos */
+        .terms-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .terms-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .terms-content::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 3px;
+        }
+
+        .terms-content::-webkit-scrollbar-thumb:hover {
+            background: #5a6fd8;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .payment-container {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .purchase-info p {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        .error {
+            border-color: #e74c3c !important;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1) !important;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.8em;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* imagen de logo sortech*/
+        .logo-sortech {
+        height: 150px; /* tamaño del logo */
+        display: block;
+        margin: 0 auto;
+        border: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html">
+            <img src="img/logo-sortech.png" alt="Logo Sortech" class="logo-sortech">
+        </a>
+    </header>
+    
+    <div class="main-content">
+        <div class="payment-container">
+            <div class="header">
+                <h1>Datos Personales</h1>
+            </div>
+
+        <form id="paymentForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nombre">Nombre <span class="required">*</span></label>
+                    <input type="text" id="nombre" name="nombre" required>
+                    <div class="error-message" id="nombre-error">Por favor ingresa tu nombre</div>
+                </div>
+                <div class="form-group">
+                    <label for="apellido">Apellido <span class="required">*</span></label>
+                    <input type="text" id="apellido" name="apellido" required>
+                    <div class="error-message" id="apellido-error">Por favor ingresa tu apellido</div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="correo">Correo Electrónico <span class="required">*</span></label>
+                    <input type="email" id="correo" name="correo" required>
+                    <div class="error-message" id="correo-error">Por favor ingresa un correo válido</div>
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Teléfono <span class="required">*</span></label>
+                    <input type="tel" id="telefono" name="telefono" placeholder="09xxxxxxxx" required>
+                    <div class="error-message" id="telefono-error">Por favor ingresa tu número de teléfono</div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="pais">País</label>
+                    <select id="pais" name="pais" disabled>
+                        <option value="Ecuador">🇪🇨 Ecuador</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="provincia">Provincia <span class="required">*</span></label>
+                    <select id="provincia" name="provincia" required>
+                        <option value="">Selecciona tu provincia</option>
+                        <option value="Azuay">Azuay</option>
+                        <option value="Bolivar">Bolívar</option>
+                        <option value="Canar">Cañar</option>
+                        <option value="Carchi">Carchi</option>
+                        <option value="Chimborazo">Chimborazo</option>
+                        <option value="Cotopaxi">Cotopaxi</option>
+                        <option value="El Oro">El Oro</option>
+                        <option value="Esmeraldas">Esmeraldas</option>
+                        <option value="Galapagos">Galápagos</option>
+                        <option value="Guayas">Guayas</option>
+                        <option value="Imbabura">Imbabura</option>
+                        <option value="Loja">Loja</option>
+                        <option value="Los Rios">Los Ríos</option>
+                        <option value="Manabi">Manabí</option>
+                        <option value="Morona Santiago">Morona Santiago</option>
+                        <option value="Napo">Napo</option>
+                        <option value="Orellana">Orellana</option>
+                        <option value="Pastaza">Pastaza</option>
+                        <option value="Pichincha">Pichincha</option>
+                        <option value="Santa Elena">Santa Elena</option>
+                        <option value="Santo Domingo">Santo Domingo de los Tsáchilas</option>
+                        <option value="Sucumbios">Sucumbíos</option>
+                        <option value="Tungurahua">Tungurahua</option>
+                        <option value="Zamora Chinchipe">Zamora Chinchipe</option>
+                    </select>
+                    <div class="error-message" id="provincia-error">Por favor selecciona tu provincia</div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="ciudad">Ciudad <span class="required">*</span></label>
+                    <input type="text" id="ciudad" name="ciudad" placeholder="Ingresa tu ciudad" required>
+                    <div class="error-message" id="ciudad-error">Por favor ingresa tu ciudad</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="direccion">Dirección <span class="required">*</span></label>
+                <input type="text" id="direccion" name="direccion" required placeholder="Ej: Calle Principal y Av. 10 de Agosto">
+                <div class="error-message" id="direccion-error">Por favor ingresa tu dirección</div>
+            </div>
+
+
+            <!-- Nueva sección de detalles de compra -->
+            <div class="purchase-details">
+                <h3>📋 Detalle de tu compra</h3>
+                <div class="purchase-info">
+                    <p><strong>Combo seleccionado:</strong> <span id="combo-selected">xxx</span></p>
+                    <p class="total-amount"><strong>Total a pagar:</strong> <span id="total-amount">$0</span></p>
+                </div>
+                <div class="delivery-info">
+                    <p>📧 Recibirás tus números en el correo registrado una vez completado el pago.</p>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Nueva sección de método de pago -->
+            <div class="metodo-pago">
+                <div class="form-group full-width">
+                    <label for="metodo-pago">💳 Método de pago <span class="required">*</span></label>
+                    <select id="metodo-pago" name="metodo-pago" required>
+                        <option value="">Selecciona tu método de pago</option>
+                        <option value="transferencia">🏦 Transferencia/Depósito</option>
+                        <option value="efectivo">💰 Efectivo</option>
+                    </select>
+                    <div class="error-message" id="metodo-pago-error">Por favor selecciona un método de pago</div>
+                </div>
+            </div>
+
+            <!-- Checkbox de términos y condiciones -->
+            <div class="terms-section">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="accept-terms" name="accept-terms" required>
+                    <label for="accept-terms" class="checkbox-label">
+                        He leído y acepto los 
+                        <span class="terms-link" id="terms-toggle">términos y condiciones</span>
+                    </label>
+                    <div class="error-message" id="accept-terms-error">Debes aceptar los términos y condiciones</div>
+                </div>
+                
+                <!-- Tarjeta de términos y condiciones (inicialmente oculta) -->
+                <div class="terms-card" id="terms-card">
+                    <div class="terms-header">
+                        <h4>📋 Términos y Condiciones</h4>
+                        <button type="button" class="close-terms" id="close-terms">✕</button>
+                    </div>
+                    <div class="terms-content">
+                        <h5>Aceptación de Términos</h5>
+                        <p>Al utilizar nuestros servicios, usted acepta estar sujeto a estos términos y condiciones de uso.</p>
+                        
+                        <p>1. Una vez completado el pago, no se realizarán devoluciones bajo ningún concepto.</p>
+                        <p>2. Los números se asignan de manera aleatoria y serán enviados al correo electrónico registrado por el usuario al momento de la compra.</p>
+                        <p>3. La participación en el sorteo implica la aceptación plena de las reglas establecidas en esta plataforma.</p>
+                        <p>4. Sortech no se responsabiliza por errores en los datos proporcionados por el usuario (nombre, correo, teléfono, ciudad, etc.). Es responsabilidad del usuario verificar que la información ingresada sea correcta.</p>
+                        <p>5. El sorteo se llevará a cabo una vez se haya vendido la totalidad de los números disponibles. Si no se alcanza esta meta, el sorteo podrá ser pospuesto hasta nuevo aviso.</p>
+                        <p>6. El método de adquisición del dispositivo sorteado se ejecutará únicamente una vez alcanzada la cantidad económica necesaria para su compra mediante la venta total de los números.</p>
+                        <p>7. En caso de detectarse actividades fraudulentas, como pagos falsos, manipulación del sistema o usos indebidos, el usuario será descalificado sin derecho a reembolso.</p>
+                        <p>8. Sortech garantiza la transparencia del sorteo, el cual será realizado en base a un mecanismo público y verificable (como el sorteo de la Lotería Nacional de Ecuador).</p>
+                        <p>9. El ganador será notificado por medio del correo electrónico y numero celular registrado. En caso de no obtener respuesta en un plazo de 7 días, Sortech se reserva el derecho de realizar un nuevo sorteo.</p>
+                        <p>10. Al participar, el usuario acepta que su nombre y ciudad pueden ser publicados en los canales oficiales de Sortech como parte de la transparencia del proceso.</p>
+                        <p>11. Sortech no almacena datos financieros como números de tarjeta. Todos los pagos son gestionados por plataformas externas seguras.</p>
+                        <p>12. El uso de esta plataforma implica la aceptación de estos términos y condiciones, los cuales pueden ser modificados en cualquier momento sin previo aviso.</p>
+                        <p>13. Sortech no está vinculado a marcas de dispositivos sorteados. Los productos son adquiridos legalmente por el organizador para los fines del sorteo.</p>
+                        <p>14. En caso de fuerza mayor o imprevistos (fallos técnicos, problemas logísticos, etc.), Sortech se reserva el derecho de modificar fechas o condiciones, informando previamente a los participantes.</p>
+                        <p>15. El participante ganador deberá enviar una foto y/o video del dispositivo recibido, autorizando a Sortech a usar este material con fines promocionales y de transparencia del sorteo.</p>
+                        <p>16. El sorteo se realizará en vivo mediante una transmisión por Instagram en la cuenta oficial de Sortech (@sortech.ec), en una fecha previamente anunciada.</p>
+                        <p>17. Este sorteo es válido únicamente dentro del territorio ecuatoriano. La entrega del premio se realizará mediante el servicio de Servientrega.</p>
+                        
+                        <p><small>Última actualización: Julio 2025</small></p>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="payment-button">
+                🔒 Procesar Pago Seguro
+            </button>
+
+            <div class="security-info">
+                <div class="shield">🛡️</div>
+                <p><strong>Transacción 100% Segura</strong><br>
+                Tus datos están protegidos con encriptación SSL de 256 bits</p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Datos de ciudades por provincia para autocompletado
+        const ciudadesPorProvincia = {
+            'Guayas': ['Guayaquil', 'Durán', 'Milagro', 'Daule', 'Samborondón', 'La Libertad', 'Salinas'],
+            'Pichincha': ['Quito', 'Cayambe', 'Mejía', 'Pedro Moncayo', 'Rumiñahui', 'San Miguel de los Bancos'],
+            'Azuay': ['Cuenca', 'Gualaceo', 'Paute', 'Santa Isabel', 'Sigsig'],
+            'Manabi': ['Manta', 'Portoviejo', 'Chone', 'El Carmen', 'Jipijapa', 'Montecristi'],
+            'El Oro': ['Machala', 'Pasaje', 'Santa Rosa', 'Huaquillas', 'El Guabo', 'Arenillas'],
+            'Los Rios': ['Babahoyo', 'Quevedo', 'Ventanas', 'Vinces', 'Puebloviejo'],
+            'Tungurahua': ['Ambato', 'Baños de Agua Santa', 'Pelileo', 'Píllaro', 'Tisaleo'],
+            'Imbabura': ['Ibarra', 'Otavalo', 'Cotacachi', 'Antonio Ante', 'Pimampiro', 'Urcuquí'],
+            'Loja': ['Loja', 'Catamayo', 'Cariamanga', 'Macará', 'Catacocha'],
+            'Chimborazo': ['Riobamba', 'Alausí', 'Chambo', 'Chunchi', 'Colta', 'Cumandá'],
+            'Cotopaxi': ['Latacunga', 'La Maná', 'Pangua', 'Pujilí', 'Salcedo', 'Saquisilí', 'Sigchos'],
+            'Carchi': ['Tulcán', 'Bolívar', 'Espejo', 'Mira', 'Montúfar', 'San Pedro de Huaca'],
+            'Esmeraldas': ['Esmeraldas', 'Atacames', 'Eloy Alfaro', 'Muisne', 'Quinindé', 'Rioverde', 'San Lorenzo'],
+            'Santa Elena': ['Santa Elena', 'La Libertad', 'Salinas'],
+            'Santo Domingo': ['Santo Domingo'],
+            'Bolivar': ['Guaranda', 'Chillanes', 'Chimbo', 'Echeandía', 'Las Naves', 'Caluma', 'San Miguel'],
+            'Canar': ['Azogues', 'Biblián', 'Cañar', 'La Troncal', 'El Tambo', 'Déleg', 'Suscal'],
+            'Pastaza': ['Puyo', 'Mera', 'Santa Clara', 'Arajuno'],
+            'Morona Santiago': ['Macas', 'Gualaquiza', 'Limón Indanza', 'Palora', 'Santiago', 'Sucúa'],
+            'Napo': ['Tena', 'Archidona', 'El Chaco', 'Quijos', 'Carlos Julio Arosemena Tola'],
+            'Orellana': ['Francisco de Orellana', 'Aguarico', 'La Joya de los Sachas', 'Loreto'],
+            'Zamora Chinchipe': ['Zamora', 'Chinchipe', 'El Pangui', 'Centinela del Cóndor', 'Palanda', 'Paquisha', 'Yacuambi', 'Yantzaza', 'Nangaritza'],
+            'Sucumbios': ['Nueva Loja', 'Gonzalo Pizarro', 'Putumayo', 'Shushufindi', 'Sucumbíos', 'Cascales', 'Cuyabeno'],
+            'Galapagos': ['Puerto Ayora', 'Puerto Baquerizo Moreno', 'Puerto Villamil']
+        };
+
+        const form = document.getElementById('paymentForm');
+        const provinciaSelect = document.getElementById('provincia');
+        const ciudadInput = document.getElementById('ciudad');
+
+        // Actualizar sugerencias de ciudades cuando cambie la provincia
+        provinciaSelect.addEventListener('change', function() {
+            const provincia = this.value;
+            ciudadInput.placeholder = provincia ? 
+                `Ej: ${ciudadesPorProvincia[provincia]?.[0] || 'Ingresa tu ciudad'}` : 
+                'Ingresa tu ciudad';
+            ciudadInput.value = '';
+        });
+
+        // Validación del formulario
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let isValid = true;
+            const requiredFields = ['nombre', 'apellido', 'correo', 'telefono', 'provincia', 'ciudad', 'metodo-pago'];
+            
+            // Limpiar errores previos
+            document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            
+            requiredFields.forEach(field => {
+                const element = document.getElementById(field);
+                const errorElement = document.getElementById(field + '-error');
+                
+                if (!element.value.trim()) {
+                    element.classList.add('error');
+                    errorElement.style.display = 'block';
+                    isValid = false;
+                }
+            });
+
+            // Validación del checkbox de términos y condiciones
+            const acceptTerms = document.getElementById('accept-terms');
+            const acceptTermsError = document.getElementById('accept-terms-error');
+            if (!acceptTerms.checked) {
+                acceptTermsError.style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validación específica para email
+            const correo = document.getElementById('correo');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (correo.value && !emailRegex.test(correo.value)) {
+                correo.classList.add('error');
+                document.getElementById('correo-error').style.display = 'block';
+                document.getElementById('correo-error').textContent = 'Por favor ingresa un correo válido';
+                isValid = false;
+            }
+            
+            // Validación para teléfono (formato Ecuador)
+            const telefono = document.getElementById('telefono');
+            const telefonoRegex = /^0[9][0-9]{8}$/;
+            if (telefono.value && !telefonoRegex.test(telefono.value)) {
+                telefono.classList.add('error');
+                document.getElementById('telefono-error').style.display = 'block';
+                document.getElementById('telefono-error').textContent = 'Formato: 09xxxxxxxx (10 dígitos)';
+                isValid = false;
+            }
+            
+            if (isValid) {
+            // Obtener los datos del formulario
+            const nombre = document.getElementById("nombre").value;
+            const apellido = document.getElementById("apellido").value;
+            const correo = document.getElementById("correo").value;
+            const telefono = document.getElementById("telefono").value;
+            const ciudad = document.getElementById("ciudad").value;
+            const provincia = document.getElementById("provincia").value;
+            const direccion = document.getElementById("direccion").value;
+            const metodo = document.getElementById("metodo-pago").value || "No especificado";
+            
+            const combo = parseInt(localStorage.getItem("comboSeleccionado")) || 0;
+            const total = combo * 1;
+
+            // Guardar los datos en localStorage
+            const datosCompra = {
+                nombre,
+                apellido,
+                correo,
+                telefono,
+                ciudad,
+                provincia,
+                direccion,
+                metodo,
+                combo,
+                total
+            };
+
+            localStorage.setItem("datosCompra", JSON.stringify(datosCompra));
+
+            // Simular procesamiento
+            const button = document.querySelector('.payment-button');
+            button.innerHTML = '⏳ Procesando...';
+            button.disabled = true;
+
+            setTimeout(() => {
+                button.innerHTML = '✅ ¡Completado!';
+                setTimeout(() => {
+                    if (metodo === "efectivo") {
+                        window.location.href = '/efectivo';
+                    } else {
+                        window.location.href = '/instrucciones';
+                    }
+                }, 1000);
+            }, 2000);
+            }
+
+        });
+
+        // Animaciones en tiempo real
+        document.querySelectorAll('input, select').forEach(element => {
+            element.addEventListener('input', function() {
+                if (this.classList.contains('error')) {
+                    this.classList.remove('error');
+                    const errorElement = document.getElementById(this.id + '-error');
+                    if (errorElement) {
+                        errorElement.style.display = 'none';
+                    }
+                }
+            });
+        });
+
+        // Formateo automático del teléfono
+        document.getElementById('telefono').addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length > 10) {
+                value = value.slice(0, 10);
+            }
+            this.value = value;
+        });
+
+        // MULTIPLICAR NUMEROS POR EL VALOR SELECCIONADO
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            const combo = parseInt(localStorage.getItem("comboSeleccionado")) || 0;
+            const precioTotal = combo * 2; // $1 por número
+
+            actualizarDetalleCompra(`${combo} números`, `$${precioTotal}`);
+        });
+
+
+
+        // Función para actualizar los detalles de compra (puedes llamarla desde otra parte de tu aplicación)
+        function actualizarDetalleCompra(combo, total) {
+            document.getElementById('combo-selected').textContent = combo;
+            document.getElementById('total-amount').textContent = total;
+        }
+
+        // Funcionalidad para términos y condiciones
+        const termsToggle = document.getElementById('terms-toggle');
+        const termsCard = document.getElementById('terms-card');
+        const closeTerms = document.getElementById('close-terms');
+
+        // Mostrar/ocultar términos y condiciones
+        termsToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            termsCard.classList.toggle('show');
+        });
+
+        // Cerrar términos y condiciones
+        closeTerms.addEventListener('click', function() {
+            termsCard.classList.remove('show');
+        });
+
+        // Cerrar términos si se hace click fuera de la tarjeta
+        document.addEventListener('click', function(e) {
+            if (!termsCard.contains(e.target) && !termsToggle.contains(e.target)) {
+                termsCard.classList.remove('show');
+            }
+        });
+
+        // Limpiar error de términos cuando se acepta
+        document.getElementById('accept-terms').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('accept-terms-error').style.display = 'none';
+            }
+        });
+
+        // Ejemplo de uso (puedes remover esto y usar tus propios datos)
+        // actualizarDetalleCompra('Combo Premium', '$25.00');
+    </script>
+</body>
+</html>
+
+
