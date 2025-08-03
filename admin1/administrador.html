@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Mi Página</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background: #0a0a0a;
+      color: #00ff00;
+      text-align: center;
+      padding: 40px;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Cuadrícula de fondo */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Efecto de sombra verde que sigue el mouse */
+    .mouse-glow {
+      position: fixed;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(0, 255, 0, 0.15) 0%, rgba(0, 255, 0, 0.05) 30%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s ease;
+    }
+
+    /* Contenido principal */
+    .main-content {
+      position: relative;
+      z-index: 3;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+      color: #00ff00;
+      text-shadow: 
+        0 0 10px rgba(0, 255, 0, 0.8),
+        0 0 20px rgba(0, 255, 0, 0.6),
+        0 0 30px rgba(0, 255, 0, 0.4);
+      letter-spacing: 3px;
+      animation: glow-pulse 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow-pulse {
+      0% {
+        text-shadow: 
+          0 0 10px rgba(0, 255, 0, 0.8),
+          0 0 20px rgba(0, 255, 0, 0.6),
+          0 0 30px rgba(0, 255, 0, 0.4);
+      }
+      100% {
+        text-shadow: 
+          0 0 15px rgba(0, 255, 0, 1),
+          0 0 25px rgba(0, 255, 0, 0.8),
+          0 0 35px rgba(0, 255, 0, 0.6);
+      }
+    }
+
+    p {
+      font-size: 1.3em;
+      margin-bottom: 30px;
+      color: rgba(0, 255, 0, 0.8);
+      text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+    }
+
+    .botones-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .botones-container > button,
+    .botones-container > a {
+      width: 280px;
+      padding: 15px 25px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid #00ff00;
+      border-radius: 8px;
+      color: #00ff00;
+      text-decoration: none;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .botones-container > button:hover,
+    .botones-container > a:hover {
+      background: rgba(0, 255, 0, 0.1);
+      box-shadow: 
+        0 0 20px rgba(0, 255, 0, 0.6),
+        inset 0 0 20px rgba(0, 255, 0, 0.1);
+      transform: translateY(-3px);
+      text-shadow: 0 0 10px rgba(0, 255, 0, 1);
+    }
+
+    .botones-container > button:active,
+    .botones-container > a:active {
+      transform: translateY(-1px);
+    }
+
+    /* Efecto de línea de escaneo en botones */
+    .botones-container > button::before,
+    .botones-container > a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .botones-container > button:hover::before,
+    .botones-container > a:hover::before {
+      left: 100%;
+    }
+
+    .seccion-codigo {
+      display: none;
+      margin-top: 20px;
+      padding: 25px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(0, 255, 0, 0.3);
+      border-radius: 10px;
+      animation: fadeIn 0.5s ease-in-out;
+      box-shadow: 
+        0 0 15px rgba(0, 255, 0, 0.2),
+        inset 0 0 15px rgba(0, 255, 0, 0.05);
+    }
+
+    @keyframes fadeIn {
+      from { 
+        opacity: 0; 
+        transform: translateY(-20px);
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0);
+      }
+    }
+
+    input {
+      padding: 12px 15px;
+      border-radius: 5px;
+      border: 2px solid rgba(0, 255, 0, 0.3);
+      width: 250px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s ease;
+      margin-right: 10px;
+    }
+
+    input:focus {
+      border-color: #00ff00;
+      background: rgba(0, 0, 0, 0.9);
+      box-shadow: 
+        0 0 15px rgba(0, 255, 0, 0.5),
+        inset 0 0 10px rgba(0, 255, 0, 0.1);
+      text-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
+    }
+
+    input::placeholder {
+      color: rgba(0, 255, 0, 0.5);
+    }
+
+    .seccion-codigo button {
+      padding: 12px 20px;
+      background: linear-gradient(45deg, #00ff00, #00cc00);
+      border: none;
+      border-radius: 5px;
+      color: #000;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .seccion-codigo button:hover {
+      background: linear-gradient(45deg, #00cc00, #00ff00);
+      box-shadow: 
+        0 0 15px rgba(0, 255, 0, 0.8),
+        0 5px 15px rgba(0, 255, 0, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .resultado {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 5px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(0, 255, 0, 0.3);
+      font-family: 'Courier New', monospace;
+      line-height: 1.6;
+    }
+
+    .resultado p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+
+    .resultado p strong {
+      color: #00ff00;
+      text-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
+    }
+
+    /* Estados de resultado */
+    .resultado p[style*="color:red"] {
+      color: #ff4444 !important;
+      text-shadow: 0 0 5px rgba(255, 68, 68, 0.8);
+    }
+
+    .resultado p[style*="color:green"] {
+      color: #00ff00 !important;
+      text-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
+    }
+
+    /* Botón de cerrar sesión */
+    .botones-container > a[href="login.html"] {
+      background: rgba(50, 0, 0, 0.8);
+      border-color: #ff4444;
+      color: #ff4444;
+    }
+
+    .botones-container > a[href="login.html"]:hover {
+      background: rgba(255, 68, 68, 0.1);
+      box-shadow: 
+        0 0 20px rgba(255, 68, 68, 0.6),
+        inset 0 0 20px rgba(255, 68, 68, 0.1);
+      text-shadow: 0 0 10px rgba(255, 68, 68, 1);
+    }
+
+    /* Líneas decorativas */
+    .main-content::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #00ff00, transparent);
+      animation: scan-line 3s linear infinite;
+    }
+
+    @keyframes scan-line {
+      0% { width: 0; }
+      50% { width: 200px; }
+      100% { width: 0; }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body::before {
+        background-size: 30px 30px;
+      }
+      
+      h1 {
+        font-size: 2.2em;
+      }
+      
+      .botones-container > button,
+      .botones-container > a {
+        width: 250px;
+        font-size: 14px;
+      }
+      
+      input {
+        width: 200px;
+        margin-bottom: 10px;
+      }
+      
+      .seccion-codigo button {
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="mouse-glow" id="mouseGlow"></div>
+  
+  <div class="main-content">
+    <h1>Bienvenido Jair</h1>
+    <p>¿Qué deseas hacer hoy?</p>
+
+    <div class="botones-container">
+      <!-- Botón y sección: Verificar código -->
+      <button onclick="toggleSeccion('verificar')">🔍 Verificar código</button>
+      <div id="verificar" class="seccion-codigo">
+        <input type="text" id="codigo-verificar" placeholder="Ingresa el código" />
+        <button onclick="verificarCodigo()">Buscar</button>
+        <div id="resultado-verificacion" class="resultado"></div>
+      </div>
+
+      <!-- Botón y sección: Confirmar código -->
+      <button onclick="toggleSeccion('confirmar')">✅ Confirmar código</button>
+      <div id="confirmar" class="seccion-codigo">
+        <input type="text" id="codigo-confirmar" placeholder="Ingresa el código" />
+        <button onclick="confirmarCodigo()">Enviar</button>
+        <div id="resultado-confirmacion" class="resultado"></div>
+      </div>
+
+      <!-- Botón y sección: Buscar número -->
+      <button onclick="toggleSeccion('buscar-numero')">🔎 Buscar número</button>
+      <div id="buscar-numero" class="seccion-codigo">
+        <input type="text" id="numero-buscar" placeholder="Ingresa el número" />
+        <button onclick="buscarPorNumero()">Buscar</button>
+        <div id="resultado-busqueda-numero" class="resultado"></div>
+      </div>
+
+      <!-- Cerrar sesión -->
+      <a href="login.html">Cerrar sesión</a>
+    </div>
+  </div>
+
+  <!-- Backend Conectividad -->
+  <script>
+    fetch("https://backend-proyecto-x.onrender.com")
+      .then(() => console.log("🟢 Backend conectado"))
+      .catch(() => console.warn("🔴 No se pudo conectar al backend"));
+  </script>
+
+  <!-- Efecto de seguimiento del mouse -->
+  <script>
+    const mouseGlow = document.getElementById('mouseGlow');
+    
+    document.addEventListener('mousemove', (e) => {
+      mouseGlow.style.left = e.clientX + 'px';
+      mouseGlow.style.top = e.clientY + 'px';
+      mouseGlow.style.opacity = '1';
+    });
+
+    document.addEventListener('mouseleave', () => {
+      mouseGlow.style.opacity = '0';
+    });
+
+    // Efecto de escritura en los inputs
+    const inputs = document.querySelectorAll('input[type="text"]');
+    inputs.forEach(input => {
+      input.addEventListener('input', (e) => {
+        if (e.target.value) {
+          e.target.style.textShadow = '0 0 5px rgba(0, 255, 0, 0.8)';
+        } else {
+          e.target.style.textShadow = 'none';
+        }
+      });
+    });
+  </script>
+
+  <!-- Scripts funcionales originales -->
+  <script>
+    function toggleSeccion(id) {
+      const seccion = document.getElementById(id);
+      // Cerrar otras secciones
+      document.querySelectorAll('.seccion-codigo').forEach(s => {
+        if (s.id !== id) s.style.display = 'none';
+      });
+      // Alternar la actual
+      seccion.style.display = (seccion.style.display === 'none' || seccion.style.display === '') ? 'block' : 'none';
+    }
+
+    async function verificarCodigo() {
+      const codigo = document.getElementById("codigo-verificar").value.trim();
+      const resultadoDiv = document.getElementById("resultado-verificacion");
+
+      if (!codigo) {
+        resultadoDiv.innerHTML = "<p style='color:#ff4444'>Por favor ingresa un código</p>";
+        return;
+      }
+
+      try {
+        const respuesta = await fetch(`https://backend-proyecto-x.onrender.com/verificar-codigo/${codigo}`);
+        const data = await respuesta.json();
+
+        if (!respuesta.ok) {
+          resultadoDiv.innerHTML = `<p style="color:#ff4444">${data.mensaje || "Código no encontrado"}</p>`;
+          return;
+        }
+
+        resultadoDiv.innerHTML = `
+          <p><strong>Nombre:</strong> ${data.nombre}</p>
+          <p><strong>Teléfono:</strong> ${data.telefono}</p>
+          <p><strong>Combo:</strong> ${data.combo}</p>
+        `;
+      } catch (err) {
+        resultadoDiv.innerHTML = "<p style='color:#ff4444'>Error al conectar con el servidor</p>";
+      }
+    }
+
+    // Función para notificar a la página principal sobre la actualización
+    function notificarActualizacionBarra() {
+      // Crear un evento personalizado para comunicar entre ventanas
+      if (window.opener && !window.opener.closed) {
+        window.opener.postMessage({ tipo: 'actualizarBarra' }, '*');
+      }
+      
+      // También guardamos una marca de tiempo en localStorage para páginas que se abran después
+      localStorage.setItem('ultimaActualizacionBarra', Date.now().toString());
+    }
+
+    async function confirmarCodigo() {
+      const codigo = document.getElementById("codigo-confirmar").value.trim();
+      const resultadoDiv = document.getElementById("resultado-confirmacion");
+
+      if (!codigo) {
+        resultadoDiv.innerHTML = "<p style='color:#ff4444'>Por favor ingresa un código</p>";
+        return;
+      }
+
+      try {
+        const respuesta = await fetch("https://backend-proyecto-x.onrender.com/enviar-numeros", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ codigo })
+        });
+
+        const data = await respuesta.json();
+
+        if (!respuesta.ok) {
+          resultadoDiv.innerHTML = `<p style="color:#ff4444">${data.mensaje || "No se pudo enviar el correo"}</p>`;
+          return;
+        }
+
+        resultadoDiv.innerHTML = `
+          <p><strong>Nombre:</strong> ${data.nombre}</p>
+          <p><strong>Teléfono:</strong> ${data.telefono}</p>
+          <p><strong>Combo:</strong> ${data.combo}</p>
+          <p style="color:#00ff00">✅ Correo enviado exitosamente</p>
+        `;
+
+        // AQUÍ SE ACTUALIZA LA BARRA DESPUÉS DE CONFIRMAR EXITOSAMENTE
+        notificarActualizacionBarra();
+        
+      } catch (err) {
+        resultadoDiv.innerHTML = "<p style='color:#ff4444'>Error al conectar con el servidor</p>";
+      }
+    }
+
+    async function buscarPorNumero() {
+      const numero = document.getElementById("numero-buscar").value.trim();
+      const resultadoDiv = document.getElementById("resultado-busqueda-numero");
+
+      if (!numero) {
+        resultadoDiv.innerHTML = "<p style='color:#ff4444'>Por favor ingresa un número</p>";
+        return;
+      }
+
+      try {
+        const respuesta = await fetch(`https://backend-proyecto-x.onrender.com/buscar-por-numero/${numero}`);
+        const data = await respuesta.json();
+
+        if (!respuesta.ok) {
+          resultadoDiv.innerHTML = `<p style="color:#ff4444">${data.mensaje || "Número no encontrado"}</p>`;
+          return;
+        }
+
+        resultadoDiv.innerHTML = `
+          <p><strong>Nombre:</strong> ${data.nombre}</p>
+          <p><strong>Correo:</strong> ${data.correo}</p>
+          <p><strong>Teléfono:</strong> ${data.telefono}</p>
+        `;
+      } catch (err) {
+        resultadoDiv.innerHTML = "<p style='color:#ff4444'>Error al conectar con el servidor</p>";
+      }
+    }
+  </script>
+</body>
+</html>
