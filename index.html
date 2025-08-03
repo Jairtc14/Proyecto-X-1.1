@@ -57,6 +57,18 @@
       50% { opacity: 0.4; }
     }
 
+    .extra-card.deshabilitada {
+      opacity: 0.4;
+      pointer-events: none;
+      filter: grayscale(80%);
+      user-select: none;
+      transition: opacity 0.3s ease;
+    }
+    .extra-card.deshabilitada .btn-comprar {
+      background-color: #ccc !important;
+      cursor: not-allowed;
+    }
+
   </style>
 </head>
 <body>
@@ -151,6 +163,11 @@
     </div>
     <p id="mensaje-error" style="color: red; margin-top: 10px; display: none;"></p>
   </div>
+ 
+    <div id="comprar-uno-container" style="text-align:center; margin-top: 20px; display: none;">
+      <h4>¿Quieres comprar 1 número?</h4>
+    <button id="btn-comprar-uno" class="btn-comprar">Comprar 1 número</button>
+  </div>
 </div>
 
 <div style="text-align: center; margin-top: 40px; margin-bottom: 60px;">
@@ -212,10 +229,18 @@ function actualizarDisponibilidad(numerosDisponibles) {
   const mensajeCompleto = document.getElementById('mensaje-completo');
   const seccionCombos = document.getElementById('seccion-combos');
 
+  // Elementos extra para "Más números" y "Comprar 1 número"
+  const inputMasNumeros = document.getElementById('cantidad-numeros');
+  const btnMasNumeros = inputMasNumeros ? inputMasNumeros.nextElementSibling : null; // botón comprar dentro de extra-card
+  const extraCard = document.querySelector('.extra-card'); // contenedor de más números
+  const comprarUnoContainer = document.getElementById('comprar-uno-container');
+  const btnComprarUno = document.getElementById('btn-comprar-uno');
+
   // Mostrar u ocultar mensaje de "todos vendidos"
   if (numerosDisponibles <= 0) {
     mensajeCompleto.style.display = 'block';
     seccionCombos.style.display = 'none';
+    if (comprarUnoContainer) comprarUnoContainer.style.display = 'none';
     return;
   } else {
     mensajeCompleto.style.display = 'none';
@@ -252,6 +277,29 @@ function actualizarDisponibilidad(numerosDisponibles) {
       card.classList.remove('deshabilitada');
     }
   });
+
+  // Deshabilitar "Más números" si no hay al menos 20 números disponibles
+  if (inputMasNumeros && btnMasNumeros && extraCard) {
+    if (numerosDisponibles < 20) {
+      inputMasNumeros.disabled = true;
+      btnMasNumeros.disabled = true;
+      inputMasNumeros.value = ''; // limpiar input
+      extraCard.classList.add('deshabilitada');
+    } else {
+      inputMasNumeros.disabled = false;
+      btnMasNumeros.disabled = false;
+      extraCard.classList.remove('deshabilitada');
+    }
+  }
+
+  // Mostrar botón para comprar 1 número solo si queda 1 número disponible
+  if (comprarUnoContainer && btnComprarUno) {
+    if (numerosDisponibles === 1) {
+      comprarUnoContainer.style.display = 'block';
+    } else {
+      comprarUnoContainer.style.display = 'none';
+    }
+  }
 }
 
 // Barra de Porcentaje
@@ -336,6 +384,7 @@ function actualizarDisponibilidad(numerosDisponibles) {
 
 </body>
 </html>
+
 
 
 
