@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADMIN TERMINAL - SISTEMA</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Orbitron', monospace;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+      color: #00ff88;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Grid cyberpunk background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 255, 136, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 136, 0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: -1;
+      animation: gridPulse 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes gridPulse {
+      0% { opacity: 0.3; }
+      100% { opacity: 0.6; }
+    }
+
+    /* Glitch effect for title */
+    @keyframes glitch {
+      0% { transform: translateX(0); }
+      20% { transform: translateX(-2px); }
+      40% { transform: translateX(2px); }
+      60% { transform: translateX(-1px); }
+      80% { transform: translateX(1px); }
+      100% { transform: translateX(0); }
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 3.5em;
+      font-weight: 900;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      text-shadow: 
+        0 0 10px #00ff88,
+        0 0 20px #00ff88,
+        0 0 30px #00ff88;
+      animation: glitch 3s infinite;
+    }
+
+    .subtitle {
+      font-size: 1.2em;
+      margin-bottom: 40px;
+      color: #ff6b35;
+      text-shadow: 0 0 10px #ff6b35;
+      opacity: 0.9;
+    }
+
+    .botones-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    button, a {
+      width: 300px;
+      padding: 15px 25px;
+      background: linear-gradient(45deg, #1a1a2e, #16213e);
+      border: 2px solid #00ff88;
+      color: #00ff88;
+      text-decoration: none;
+      border-radius: 0;
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      font-size: 1.1em;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+      box-shadow: 
+        0 0 20px rgba(0, 255, 136, 0.3),
+        inset 0 0 20px rgba(0, 255, 136, 0.1);
+    }
+
+    button::before, a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.4), transparent);
+      transition: left 0.5s;
+    }
+
+    button:hover, a:hover {
+      color: #000;
+      background: #00ff88;
+      border-color: #00ccff;
+      box-shadow: 
+        0 0 30px #00ff88,
+        0 0 50px rgba(0, 255, 136, 0.5);
+      text-shadow: none;
+    }
+
+    button:hover::before, a:hover::before {
+      left: 100%;
+    }
+
+    .seccion-codigo {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 255, 0.1));
+      border: 1px solid #00ff88;
+      border-radius: 10px;
+      box-shadow: 
+        0 0 20px rgba(0, 255, 136, 0.3),
+        inset 0 0 20px rgba(0, 255, 136, 0.1);
+      opacity: 0;
+      transform: translateY(-20px) scale(0.9);
+      transition: all 0.5s ease;
+    }
+
+    .seccion-codigo.show {
+      animation: slideIn 0.5s ease-in-out forwards;
+    }
+
+    .seccion-codigo.hide {
+      animation: slideOut 0.5s ease-in-out forwards;
+    }
+
+    @keyframes slideIn {
+      from { 
+        opacity: 0; 
+        transform: translateY(-20px) scale(0.9);
+        display: none;
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1);
+        display: block;
+      }
+    }
+
+    @keyframes slideOut {
+      from { 
+        opacity: 1; 
+        transform: translateY(0) scale(1);
+      }
+      to { 
+        opacity: 0; 
+        transform: translateY(-20px) scale(0.9);
+      }
+    }
+
+    input {
+      width: 100%;
+      max-width: 250px;
+      padding: 12px 15px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid #00ccff;
+      border-radius: 5px;
+      color: #00ff88;
+      font-family: 'Orbitron', monospace;
+      font-size: 1em;
+      margin-bottom: 15px;
+      position: relative;
+      box-shadow: 
+        0 0 10px rgba(0, 204, 255, 0.3),
+        inset 0 0 10px rgba(0, 204, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .input-container {
+      position: relative;
+      width: 100%;
+      max-width: 250px;
+      margin-bottom: 15px;
+    }
+
+    .input-label {
+      position: absolute;
+      left: 15px;
+      top: 12px;
+      color: rgba(0, 255, 136, 0.5);
+      font-size: 1em;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      font-family: 'Orbitron', monospace;
+    }
+
+    .input-label.active {
+      top: -10px;
+      left: 10px;
+      font-size: 0.8em;
+      color: #00ccff;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 0 5px;
+      text-shadow: 0 0 5px #00ccff;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #00ff88;
+      box-shadow: 
+        0 0 20px rgba(0, 255, 136, 0.5),
+        inset 0 0 20px rgba(0, 255, 136, 0.1);
+    }
+
+    input::placeholder {
+      color: transparent;
+    }
+
+    .seccion-codigo button {
+      width: 120px;
+      padding: 10px;
+      font-size: 0.9em;
+      margin-top: 10px;
+    }
+
+    .resultado {
+      margin-top: 15px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.8);
+      border-left: 4px solid #00ff88;
+      border-radius: 5px;
+      font-weight: bold;
+      text-shadow: 0 0 5px currentColor;
+      font-family: 'Courier New', monospace;
+      position: relative;
+    }
+
+    .resultado::before {
+      content: '> ';
+      color: #00ff88;
+      font-weight: bold;
+    }
+
+    .terminal-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.2em;
+      background-color: #00ff88;
+      margin-left: 3px;
+      animation: blink 1s infinite;
+      vertical-align: text-bottom;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    .resultado p {
+      margin: 5px 0;
+      line-height: 1.4;
+    }
+
+    /* Efectos especiales */
+    .scan-line {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #00ff88, transparent);
+      animation: scan 3s linear infinite;
+      z-index: 1000;
+    }
+
+    @keyframes scan {
+      0% { top: 0; opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5em;
+        letter-spacing: 2px;
+      }
+      
+      button, a {
+        width: 250px;
+        font-size: 1em;
+      }
+      
+      .container {
+        padding: 15px;
+      }
+    }
+
+    /* Status indicator */
+    .status-indicator {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #00ff88;
+      font-size: 0.9em;
+      z-index: 1000;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #00ff88;
+      animation: pulse 2s infinite;
+      box-shadow: 0 0 10px #00ff88;
+    }
+
+    /* Estilo especial para cerrar sesión */
+    .logout-btn {
+      background: linear-gradient(45deg, #2a1a1a, #3e1616) !important;
+      border-color: #ff0066 !important;
+      color: #ff0066 !important;
+      box-shadow: 
+        0 0 20px rgba(255, 6, 102, 0.3),
+        inset 0 0 20px rgba(255, 6, 102, 0.1) !important;
+    }
+
+    .logout-btn::before {
+      background: linear-gradient(90deg, transparent, rgba(255, 6, 102, 0.4), transparent) !important;
+    }
+
+    .logout-btn:hover {
+      color: #000 !important;
+      background: #ff0066 !important;
+      border-color: #ff3388 !important;
+      box-shadow: 
+        0 0 30px #ff0066,
+        0 0 50px rgba(255, 6, 102, 0.5) !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="scan-line"></div>
+  
+  <div class="status-indicator">
+    <div class="status-dot"></div>
+    <span>SISTEMA ACTIVO</span>
+  </div>
+
+  <div class="container">
+    <h1>ADMIN TERMINAL</h1>
+    <p class="subtitle">ACCESO AUTORIZADO</p>
+
+    <div class="botones-container">
+      <!-- Botón y sección: Verificar código -->
+      <button onclick="toggleSeccion('verificar')">🔍 VERIFICAR CÓDIGO</button>
+      <div id="verificar" class="seccion-codigo">
+        <div class="input-container">
+          <input type="text" id="codigo-verificar" />
+          <label class="input-label" for="codigo-verificar">INGRESA EL CÓDIGO</label>
+        </div>
+        <button onclick="verificarCodigo()">BUSCAR</button>
+        <div id="resultado-verificacion" class="resultado"></div>
+      </div>
+
+      <!-- Botón y sección: Confirmar código -->
+      <!-- <button onclick="toggleSeccion('confirmar')">✅ CONFIRMAR CÓDIGO</button>
+      <div id="confirmar" class="seccion-codigo">
+        <div class="input-container">
+          <input type="text" id="codigo-confirmar" />
+          <label class="input-label" for="codigo-confirmar">INGRESA EL CÓDIGO</label>
+        </div>
+        <button onclick="confirmarCodigo()">ENVIAR</button>
+        <div id="resultado-confirmacion" class="resultado"></div>
+      </div>
+      --!>
+      <!-- Cerrar sesión -->
+      <a href="login.html" class="logout-btn">🚪 CERRAR SESIÓN</a>
+    </div>
+  </div>
+
+  <!-- Backend Conectividad -->
+  <script>
+    fetch("https://backend-proyecto-x.onrender.com")
+      .then(() => {
+        console.log("🟢 Backend conectado");
+        updateStatus("CONECTADO", "#00ff88");
+      })
+      .catch(() => {
+        console.warn("🔴 No se pudo conectar al backend");
+        updateStatus("DESCONECTADO", "#ff0066");
+      });
+    
+    function updateStatus(text, color) {
+      const indicator = document.querySelector('.status-indicator span');
+      const dot = document.querySelector('.status-dot');
+      indicator.textContent = `SISTEMA ${text}`;
+      indicator.style.color = color;
+      dot.style.background = color;
+      dot.style.boxShadow = `0 0 10px ${color}`;
+    }
+  </script>
+
+  <!-- Scripts funcionales -->
+  <script>
+    // Manejo de labels flotantes
+    document.addEventListener('DOMContentLoaded', function() {
+      const inputs = document.querySelectorAll('input');
+      inputs.forEach(input => {
+        const label = input.nextElementSibling;
+        
+        input.addEventListener('focus', function() {
+          label.classList.add('active');
+        });
+        
+        input.addEventListener('blur', function() {
+          if (this.value === '') {
+            label.classList.remove('active');
+          }
+        });
+        
+        // Verificar si el input ya tiene valor al cargar
+        if (input.value !== '') {
+          label.classList.add('active');
+        }
+      });
+    });
+
+    function toggleSeccion(id) {
+      const seccion = document.getElementById(id);
+      const isVisible = seccion.style.display === 'block';
+      
+      // Cerrar otras secciones con animación
+      document.querySelectorAll('.seccion-codigo').forEach(s => {
+        if (s.id !== id && s.style.display === 'block') {
+          s.classList.remove('show');
+          s.classList.add('hide');
+          setTimeout(() => {
+            s.style.display = 'none';
+            s.classList.remove('hide');
+          }, 500);
+        }
+      });
+      
+      // Alternar la actual
+      if (isVisible) {
+        seccion.classList.remove('show');
+        seccion.classList.add('hide');
+        setTimeout(() => {
+          seccion.style.display = 'none';
+          seccion.classList.remove('hide');
+        }, 500);
+      } else {
+        seccion.style.display = 'block';
+        seccion.classList.add('show');
+        // Limpiar resultado anterior
+        const resultado = seccion.querySelector('.resultado');
+        resultado.innerHTML = '<span class="terminal-cursor"></span>';
+      }
+    }
+
+    async function verificarCodigo() {
+      const codigo = document.getElementById("codigo-verificar").value.trim();
+      const resultadoDiv = document.getElementById("resultado-verificacion");
+
+      if (!codigo) {
+        resultadoDiv.innerHTML = "ERROR: Por favor ingresa un código<span class='terminal-cursor'></span>";
+        resultadoDiv.style.color = '#ff0066';
+        return;
+      }
+
+      resultadoDiv.innerHTML = "PROCESANDO...<span class='terminal-cursor'></span>";
+      resultadoDiv.style.color = '#00ccff';
+
+      try {
+        const respuesta = await fetch(`https://backend-proyecto-x.onrender.com/verificar-codigo/${codigo}`);
+        const data = await respuesta.json();
+
+        if (!respuesta.ok) {
+          resultadoDiv.innerHTML = `ERROR: ${data.mensaje || "Código no encontrado"}<span class='terminal-cursor'></span>`;
+          resultadoDiv.style.color = '#ff0066';
+          return;
+        }
+
+        resultadoDiv.innerHTML = `
+          NOMBRE: ${data.nombre}<br>
+          TELÉFONO: ${data.telefono}<br>
+          COMBO: ${data.combo}<br>
+          <span style="color:#00ff88">✅ DATOS VERIFICADOS</span><span class='terminal-cursor'></span>
+        `;
+        resultadoDiv.style.color = '#00ff88';
+      } catch (err) {
+        resultadoDiv.innerHTML = "ERROR: Conexión con servidor fallida<span class='terminal-cursor'></span>";
+        resultadoDiv.style.color = '#ff0066';
+      }
+    }
+
+    async function confirmarCodigo() {
+      const codigo = document.getElementById("codigo-confirmar").value.trim();
+      const resultadoDiv = document.getElementById("resultado-confirmacion");
+
+      if (!codigo) {
+        resultadoDiv.innerHTML = "ERROR: Por favor ingresa un código<span class='terminal-cursor'></span>";
+        resultadoDiv.style.color = '#ff0066';
+        return;
+      }
+
+      resultadoDiv.innerHTML = "ENVIANDO...<span class='terminal-cursor'></span>";
+      resultadoDiv.style.color = '#00ccff';
+
+      try {
+        const respuesta = await fetch("https://backend-proyecto-x.onrender.com/enviar-numeros", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ codigo })
+        });
+
+        const data = await respuesta.json();
+
+        if (!respuesta.ok) {
+          resultadoDiv.innerHTML = `ERROR: ${data.mensaje || "No se pudo enviar el correo"}<span class='terminal-cursor'></span>`;
+          resultadoDiv.style.color = '#ff0066';
+          return;
+        }
+
+        resultadoDiv.innerHTML = `
+          NOMBRE: ${data.nombre}<br>
+          TELÉFONO: ${data.telefono}<br>
+          COMBO: ${data.combo}<br>
+          <span style="color:#00ff88">✅ CORREO ENVIADO EXITOSAMENTE</span><span class='terminal-cursor'></span>
+        `;
+        resultadoDiv.style.color = '#00ff88';
+      } catch (err) {
+        resultadoDiv.innerHTML = "ERROR: Conexión con servidor fallida<span class='terminal-cursor'></span>";
+        resultadoDiv.style.color = '#ff0066';
+      }
+    }
+  </script>
+</body>
+</html>
