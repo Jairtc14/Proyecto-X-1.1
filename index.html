@@ -218,37 +218,49 @@ function actualizarDisponibilidad(numerosDisponibles) {
   });
 }
 
-  
 // Barra de Porcentaje
   async function obtenerYAnimarBarra() {
   const barra = document.querySelector(".barra-progreso");
   const progresoTexto = document.getElementById("progreso-texto");
-    
-    // Mostrar mensaje de carga antes del fetch
+
+  // Mostrar mensaje de carga antes del fetch
   barra.style.width = "0%";
   barra.style.backgroundColor = "#ccc"; // color gris mientras carga
   progresoTexto.textContent = "⏳ Cargando...";
-    
+
   try {
     const res = await fetch("https://backend-proyecto-x.onrender.com/progreso");
     const data = await res.json();
 
     let porcentaje = Math.floor((data.vendidos / data.total) * 100);
     if (porcentaje > 99 && data.vendidos < data.total) {
-      porcentaje = 99; // nunca mostrar 100% si no se ha llegado realmente
+      porcentaje = 99; // nunca mostrar 100% si aún no se ha alcanzado
     }
 
-    animarBarraProgreso(porcentaje); // 👈 ¡IMPORTANTE!
-    
+    animarBarraProgreso(porcentaje);
+
     let disponibles = data.total - data.vendidos;
     actualizarDisponibilidad(disponibles);
 
+    // Actualizar el texto cuando se obtienen los datos
+    progresoTexto.textContent = `📈 Progreso de números vendidos: ${porcentaje}%`;
+
+    // Cambiar color según porcentaje (opcional)
+    if (porcentaje < 50) {
+      barra.style.backgroundColor = "#28a745";
+    } else if (porcentaje < 80) {
+      barra.style.backgroundColor = "#ffc107";
+    } else {
+      barra.style.backgroundColor = "#dc3545";
+    }
+
   } catch (err) {
     console.error("Error al obtener progreso:", err);
-    barra.textContent = "Error";
+    progresoTexto.textContent = "⚠️ Error al cargar el progreso";
     barra.style.backgroundColor = "#999";
   }
 }
+
 
   function redirigirCompra() {
     const input = document.getElementById("cantidad-numeros");
@@ -299,6 +311,7 @@ function actualizarDisponibilidad(numerosDisponibles) {
 
 </body>
 </html>
+
 
 
 
