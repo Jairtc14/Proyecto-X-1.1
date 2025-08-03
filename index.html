@@ -172,24 +172,25 @@
       }
     }, 20);
   }
-
+// Barra de Porcentaje
   async function obtenerYAnimarBarra() {
-    const barra = document.querySelector(".barra-progreso");
-    try {
-      const res = await fetch("https://backend-proyecto-x.onrender.com/progreso");
-      const data = await res.json();
-      const porcentaje = Math.round((data.totalNumeros || 0) / 1000 * 100);
-      animarBarraProgreso(porcentaje);
-      if (porcentaje >= 100) {
-        document.getElementById("seccion-combos").style.display = "none";
-        document.getElementById("mensaje-completo").style.display = "block";
-      }
-    } catch (err) {
-      console.error("Error al obtener progreso:", err);
-      barra.textContent = "Error";
-      barra.style.backgroundColor = "#999";
+  const barra = document.querySelector(".barra-progreso");
+  try {
+    const res = await fetch("https://backend-proyecto-x.onrender.com/progreso");
+    const data = await res.json();
+
+    let porcentaje = Math.floor((data.vendidos / data.total) * 100);
+    if (porcentaje > 99 && data.vendidos < data.total) {
+      porcentaje = 99; // nunca mostrar 100% si no se ha llegado realmente
     }
+
+    animarBarraProgreso(porcentaje); // 👈 ¡IMPORTANTE!
+  } catch (err) {
+    console.error("Error al obtener progreso:", err);
+    barra.textContent = "Error";
+    barra.style.backgroundColor = "#999";
   }
+}
 
   function redirigirCompra() {
     const input = document.getElementById("cantidad-numeros");
@@ -240,6 +241,7 @@
 
 </body>
 </html>
+
 
 
 
