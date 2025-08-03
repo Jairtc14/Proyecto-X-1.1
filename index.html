@@ -233,7 +233,7 @@ function actualizarDisponibilidad(numerosDisponibles) {
   const inputMasNumeros = document.getElementById('cantidad-numeros');
   const btnMasNumeros = inputMasNumeros ? inputMasNumeros.nextElementSibling : null; // botón comprar dentro de extra-card
   const extraCard = document.querySelector('.extra-card'); // contenedor de más números
-  const comprarUnoContainer = document.getElementById('comprar-uno-container');
+  const comprarUnoContainer = document.getElementById('comprar-uno-card');
   const btnComprarUno = document.getElementById('btn-comprar-uno');
 
   // Mostrar u ocultar mensaje de "todos vendidos"
@@ -294,12 +294,12 @@ function actualizarDisponibilidad(numerosDisponibles) {
 
   // Mostrar botón para comprar 1 número solo si queda 1 número disponible
   if (comprarUnoContainer && btnComprarUno) {
-    if (numerosDisponibles === 1) {
-      comprarUnoContainer.style.display = 'block';
-    } else {
-      comprarUnoContainer.style.display = 'none';
-    }
+  if (numerosDisponibles === 1) {
+    comprarUnoContainer.style.display = 'block';
+  } else {
+    comprarUnoContainer.style.display = 'none';
   }
+}
 }
 
 // Barra de Porcentaje
@@ -384,6 +384,7 @@ function actualizarDisponibilidad(numerosDisponibles) {
 
 </body>
 </html>
+
 
 
 
