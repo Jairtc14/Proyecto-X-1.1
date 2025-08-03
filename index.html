@@ -25,11 +25,28 @@
     }
 
     .combo-card.deshabilitada {
-  opacity: 0.5;
-  pointer-events: none; /* No permite click */
-  filter: grayscale(70%);
-  user-select: none;
-}
+      opacity: 0.4;
+      pointer-events: none;
+      filter: grayscale(80%);
+      user-select: none;
+      transition: opacity 0.3s ease;
+    }
+    .combo-card.deshabilitada .btn-comprar {
+      background-color: #ccc !important;
+      cursor: not-allowed;
+    }
+
+
+    .barra-progreso.cargando::after {
+      content: "⏳ Cargando";
+      animation: puntos 1.5s infinite;
+    }
+    @keyframes puntos {
+      0%   { content: "⏳ Cargando"; }
+      33%  { content: "⏳ Cargando."; }
+      66%  { content: "⏳ Cargando.."; }
+      100% { content: "⏳ Cargando..."; }
+    }
 
   </style>
 </head>
@@ -57,7 +74,6 @@
   <p class="texto-centrado3">¡Números Asignados!</p>
   <div class="barra-contenedor">
     <div class="barra-progreso">0.00%</div>
-    <p id="progreso-texto"></p>
     
   </div>
   <p class="texto-centrado4">📌 El dispositivo se sorteará una vez se hayan vendido todos los números, es decir, cuando la barra de progreso alcance el 100%.</p>
@@ -223,12 +239,11 @@ function actualizarDisponibilidad(numerosDisponibles) {
 // Barra de Porcentaje
   async function obtenerYAnimarBarra() {
   const barra = document.querySelector(".barra-progreso");
-  const progresoTexto = document.getElementById("progreso-texto");
 
-  // Mostrar mensaje de carga antes del fetch
-  barra.style.width = "0%";
-  barra.style.backgroundColor = "#ccc"; // color gris mientras carga
-  progresoTexto.textContent = "⏳ Cargando...";
+  // Mostrar estado inicial de carga
+  barra.textContent = "⏳ Cargando...";
+  barra.style.backgroundColor = "#f0ad4e";
+  barra.style.width = "100%";
 
   try {
     const res = await fetch("https://backend-proyecto-x.onrender.com/progreso");
@@ -236,33 +251,23 @@ function actualizarDisponibilidad(numerosDisponibles) {
 
     let porcentaje = Math.floor((data.vendidos / data.total) * 100);
     if (porcentaje > 99 && data.vendidos < data.total) {
-      porcentaje = 99; // nunca mostrar 100% si aún no se ha alcanzado
+      porcentaje = 99; // evitar mostrar 100% si no está completo
     }
 
+    // Animar barra de progreso
     animarBarraProgreso(porcentaje);
+    barra.textContent = `${porcentaje}%`;
 
-    let disponibles = data.total - data.vendidos;
+    // Calcular disponibles y actualizar combos
+    const disponibles = data.total - data.vendidos;
     actualizarDisponibilidad(disponibles);
-
-    // Actualizar el texto cuando se obtienen los datos
-    progresoTexto.textContent = `📈 Progreso de números vendidos: ${porcentaje}%`;
-
-    // Cambiar color según porcentaje (opcional)
-    if (porcentaje < 50) {
-      barra.style.backgroundColor = "#28a745";
-    } else if (porcentaje < 80) {
-      barra.style.backgroundColor = "#ffc107";
-    } else {
-      barra.style.backgroundColor = "#dc3545";
-    }
 
   } catch (err) {
     console.error("Error al obtener progreso:", err);
-    progresoTexto.textContent = "⚠️ Error al cargar el progreso";
+    barra.textContent = "⚠️ Error";
     barra.style.backgroundColor = "#999";
   }
 }
-
 
   function redirigirCompra() {
     const input = document.getElementById("cantidad-numeros");
@@ -313,6 +318,7 @@ function actualizarDisponibilidad(numerosDisponibles) {
 
 </body>
 </html>
+
 
 
 
