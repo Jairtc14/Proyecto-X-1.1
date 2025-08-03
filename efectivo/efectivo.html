@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pago en Efectivo - Sortech</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: #fff;
+      max-width: 500px;
+      margin: auto;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #111;
+    }
+    .dato {
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+    .dato span {
+      font-weight: bold;
+      color: #333;
+    }
+    .alerta {
+      background-color: #ffeeba;
+      border-left: 5px solid #ffc107;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+    }
+    #codigoConfirmacion {
+      font-size: 1.5em;
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+      color: #1e90ff;
+    }
+    .error {
+      color: red;
+      margin-top: 15px;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+      .dato {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Pago en Efectivo</h2>
+
+    <div class="alerta">
+      Recuerda que tu reserva será válida por 24 horas. Debes realizar el pago en el punto autorizado más cercano.
+    </div>
+
+    <div class="dato">👤 Nombre completo: <span id="nombre"></span></div>
+    <div class="dato">📧 Correo: <span id="correo"></span></div>
+    <div class="dato">📱 Teléfono: <span id="telefono"></span></div>
+    <div class="dato">🏙️ Ciudad: <span id="ciudad"></span></div>
+    <div class="dato">🗺️ Provincia: <span id="provincia"></span></div>
+    <div class="dato">🏡 Dirección: <span id="direccion"></span></div>
+    <div class="dato">💳 Método de pago: <span id="metodo"></span></div>
+    <div class="dato">🎟️ Combo seleccionado: <span id="combo"></span></div>
+    <div class="dato">💰 Total a pagar: <span id="total"></span></div>
+
+    <div id="codigoConfirmacion"></div>
+    <div id="errorGuardar" class="error"></div>
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    let datos = JSON.parse(localStorage.getItem("datosCompra"));
+
+    if (!datos) {
+      alert("No se encontraron datos de compra.");
+      window.location.href = "index.html";
+      return;
+    }
+
+    // Mostrar datos en pantalla
+    document.getElementById("nombre").textContent = datos.nombre + " " + (datos.apellido || "");
+    document.getElementById("correo").textContent = datos.correo;
+    document.getElementById("telefono").textContent = datos.telefono;
+    document.getElementById("ciudad").textContent = datos.ciudad;
+    document.getElementById("provincia").textContent = datos.provincia;
+    document.getElementById("direccion").textContent = datos.direccion;
+    document.getElementById("metodo").textContent = datos.metodo;
+    document.getElementById("combo").textContent = datos.combo + " números";
+    document.getElementById("total").textContent = "$" + datos.total;
+
+    if (localStorage.getItem("confirmacionGuardada") === "true" && datos.codigo) {
+      document.getElementById("codigoConfirmacion").textContent = "Código de confirmación ya generado: " + datos.codigo;
+      return;
+    }
+
+    // Función para generar código único tipo "EF1234"
+    async function generarCodigoUnico() {
+      const generar = () => {
+        const num = Math.floor(1000 + Math.random() * 9000);
+        return "EF" + num;
+      };
+
+      let codigo;
+      let existe = true;
+
+      while (existe) {
+        codigo = generar();
+        const res = await fetch(`https://backend-proyecto-x.onrender.com/codigo-existe/${codigo}`);
+        const data = await res.json();
+        existe = data.existe;
+      }
+      return codigo;
+    }
+
+    try {
+      const codigoGenerado = await generarCodigoUnico();
+      datos.codigo = codigoGenerado;
+
+      // Mostrar código en pantalla
+      document.getElementById("codigoConfirmacion").textContent = "Código de confirmación: " + codigoGenerado;
+
+      // Enviar datos al backend
+      const response = await fetch("https://backend-proyecto-x.onrender.com/guardar-confirmacion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos),
+      });
+
+      const resultado = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem("confirmacionGuardada", "true");
+        localStorage.setItem("datosCompra", JSON.stringify(datos)); // actualiza con el código
+        console.log("Guardado con éxito:", resultado);
+      } else {
+        document.getElementById("errorGuardar").textContent = resultado.error || "Error al guardar confirmación.";
+      }
+    } catch (error) {
+      document.getElementById("errorGuardar").textContent = "Error al comunicarse con el servidor.";
+      console.error("Error al guardar confirmación:", error);
+    }
+  });
+</script>
+
+</body>
+</html>
+
