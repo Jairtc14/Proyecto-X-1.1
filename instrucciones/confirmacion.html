@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmación de Compra</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.06) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    h1 {
+      font-size: clamp(24px, 5vw, 36px);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 40px;
+      color: white;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transform: translateY(-30px);
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .cuadro {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 25px;
+      width: 100%;
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 8px 16px rgba(0, 0, 0, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideInLeft 0.6s ease-out forwards;
+    }
+
+    .cuadro:nth-child(2) { animation-delay: 0.1s; }
+    .cuadro:nth-child(3) { animation-delay: 0.2s; }
+    .cuadro:nth-child(4) { animation-delay: 0.3s; }
+    .cuadro:nth-child(5) { animation-delay: 0.4s; }
+    .cuadro:nth-child(6) { animation-delay: 0.5s; }
+
+    .cuadro:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.15),
+        0 12px 20px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+
+    .fila-datos {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .fila-datos span {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .titulo-cuadro {
+      font-weight: 600;
+      margin-bottom: 20px;
+      font-size: 1.3em;
+      color: #2d3748;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .titulo-cuadro::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 2px;
+    }
+
+    .tabla {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .tabla th, .tabla td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      transition: background-color 0.2s ease;
+    }
+
+    .tabla th {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .tabla tr:hover {
+      background-color: rgba(102, 126, 234, 0.05);
+    }
+
+    .tabla tr:last-child td {
+      border-bottom: none;
+    }
+
+    .bank-info {
+      margin-top: 20px;
+      padding: 25px;
+      border: 2px solid rgba(102, 126, 234, 0.1);
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(237, 242, 247, 0.8) 100%);
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bank-info::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .bank-info:hover::before {
+      left: 100%;
+    }
+
+    .bank-info img {
+      max-width: 150px;
+      height: auto;
+      margin-bottom: 15px;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+      transition: transform 0.3s ease;
+    }
+
+    .bank-info img:hover {
+      transform: scale(1.05);
+    }
+
+    .bank-info p {
+      margin: 8px 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .instructions {
+      background: linear-gradient(135deg, rgba(255, 243, 224, 0.9) 0%, rgba(255, 237, 213, 0.9) 100%);
+      border-left: 4px solid #f59e0b;
+      padding: 20px;
+      border-radius: 0 12px 12px 0;
+      margin: 15px 0;
+    }
+
+    .instructions p {
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+
+    .instructions strong {
+      color: #dc2626;
+      font-weight: 600;
+    }
+
+    .numero-pedido {
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 25px;
+      font-weight: 600;
+                /*display: inline-block; */
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    #whatsapp-float {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    #whatsapp-float:hover {
+      transform: scale(1.1);
+    }
+
+    #whatsapp-float img {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      box-shadow: 
+        0 8px 25px rgba(37, 211, 102, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+
+    .btn-inicio {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      box-shadow: 
+        0 8px 25px rgba(31, 41, 55, 0.3),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-inicio:hover {
+      background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+      transform: translateY(-3px);
+      box-shadow: 
+        0 12px 35px rgba(31, 41, 55, 0.4),
+        0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+
+      .cuadro {
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .fila-datos {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .fila-datos span {
+        min-width: auto;
+      }
+
+      .tabla th, .tabla td {
+        padding: 12px 8px;
+        font-size: 14px;
+      }
+
+      .btn-inicio, #whatsapp-float {
+        bottom: 20px;
+      }
+
+      .btn-inicio {
+        left: 20px;
+        padding: 12px 20px;
+        font-size: 14px;
+      }
+
+      #whatsapp-float img {
+        width: 55px;
+        height: 55px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .bank-info {
+        margin: 15px 0;
+        padding: 20px 15px;
+      }
+
+      .titulo-cuadro {
+        font-size: 1.1em;
+      }
+    }
+
+    /* Loading animation for dynamic content */
+    .loading {
+      background: linear-gradient(90deg, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.1) 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 4px;
+      height: 20px;
+      margin: 8px 0;
+    }
+
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎉 ¡Gracias! Tu compra ha sido recibida.</h1>
+
+    <div class="cuadro" id="cuadro-resumen"></div>
+    
+    <div class="cuadro">
+      <div class="titulo-cuadro">📋 Instrucciones de Pago</div>
+      <div class="instructions">
+        <p><strong>1.</strong> Realiza una captura de pantalla al <strong>número de pedido</strong> (en la parte superior izquierda).</p>
+        <p><strong>2.</strong> Transfiere o deposita EL MONTO TOTAL de la compra, tienes un tiempo máximo de <strong>1 hora</strong> para enviar el comprobante y número de pedido A WHATSAPP o tu PEDIDO SE CANCELARÁ Y NO SE HARÁN REEMBOLSOS. Si ya realizaste el pago y aún no te respondemos, no te preocupes, tu pedido no se cancelará.</p>
+        <p><strong>3.</strong> Envíanos el COMPROBANTE DE PAGO Y NÚMERO DE PEDIDO (esquina superior izquierda de esta pantalla) por WhatsApp al <strong>+593983714315</strong> O NO SE GENERARÁN TUS NÚMEROS.</p>
+        <p><strong>4.</strong> Recibirás tus números por correo electrónico una vez verificado el pago. (Recuerda, esto puede tardar en caso de transferencias interbancarias o en horas pico).</p>
+      </div>
+      
+      <div class="titulo-cuadro">🏦 Números de cuenta</div>
+      <div class="bank-info">
+        <img src="img/logo_bcpich.png" alt="Banco Pichincha Logo" />
+        <p><strong>Banco:</strong> Banco Pichincha</p>
+        <p><strong>Tipo de cuenta:</strong> Cuenta de ahorros</p>
+        <p><strong>Número de cuenta:</strong> 7700056444</p>
+        <p><strong>A nombre de:</strong> Tomala Correa Jair Valentino</p>
+        <p><strong>Cédula/RUC:</strong> 0956671705</p>
+        
+        <div style="margin: 20px 0; height: 1px; background: rgba(0,0,0,0.1);"></div>
+        
+        <img src="img/logo_bcgye.png" alt="Banco Guayaquil Logo" />
+        <p><strong>Banco:</strong> Banco Guayaquil</p>
+        <p><strong>Tipo de cuenta:</strong> Cuenta de ahorros</p>
+        <p><strong>Número de cuenta:</strong> 0126670920</p>
+        <p><strong>A nombre de:</strong> Tomala Correa Jair Valentino</p>
+        <p><strong>Cédula/RUC:</strong> 0956671705</p>
+      </div>
+    </div>
+
+    <div class="cuadro" id="cuadro-detalles"></div>
+    <div class="cuadro" id="cuadro-facturacion"></div>
+    
+    <div class="cuadro">
+      <div class="titulo-cuadro">🎲 Tus Números</div>
+      <p>Serán generados una vez que verificado el pago. Recuerda, esto puede tardar ya que la verificación de pago es manual. Por favor, sigue las instrucciones detalladas en el apartado "Instrucciones de pago".</p>
+    </div>
+  </div>
+
+  <script>
+    const datos = JSON.parse(localStorage.getItem("datosCompra")) || {};
+    datos.metodo = datos.metodo === "transferencia" ? "Transferencia/Depósito" : datos.metodo;
+
+    const pedidoID = "PX" + Math.floor(100000 + Math.random() * 900000);
+    const fechaCompra = new Date().toLocaleDateString('es-ES', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+
+    function renderResumen() {
+      document.getElementById("cuadro-resumen").innerHTML = `
+        <div class="titulo-cuadro">📊 Resumen del Pedido</div>
+        <div class="fila-datos">
+          <span><strong>Nº Pedido:</strong> <span class="numero-pedido">${pedidoID}</span></span>
+          <span><strong>Fecha:</strong> ${fechaCompra}</span>
+        </div>
+        <div class="fila-datos">
+          <span><strong>Combo seleccionado:</strong> ${datos.combo || "-"}</span>
+        </div>
+        <div class="fila-datos">
+          <span><strong>Cliente:</strong> ${datos.nombre || ""} ${datos.apellido || ""}</span>
+          <span><strong>Total:</strong> <span style="color: #059669; font-weight: 600; font-size: 1.1em;">$${datos.total || "0.00"}</span></span>
+        </div>
+        <div><strong>Método de Pago:</strong> ${datos.metodo || "-"}</div>
+      `;
+    }
+
+    function renderDetalles() {
+      document.getElementById("cuadro-detalles").innerHTML = `
+        <div class="titulo-cuadro">📦 Detalles del Pedido</div>
+        <table class="tabla">
+          <tr><th>Producto</th><th>Total</th></tr>
+          <tr>
+            <td>${localStorage.getItem("productoSeleccionado") || "Producto en sorteo"} (Combo ${datos.combo || "-"})</td>
+            <td>$${datos.total || "0.00"}</td>
+          </tr>
+          <tr><td>Subtotal</td><td>$${datos.total || "0.00"}</td></tr>
+          <tr><td>Método de pago</td><td>${datos.metodo || "-"}</td></tr>
+          <tr style="background: rgba(102, 126, 234, 0.05);"><td><strong>Total</strong></td><td><strong style="color: #059669;">$${datos.total || "0.00"}</strong></td></tr>
+        </table>
+      `;
+    }
+
+    function renderFacturacion() {
+      document.getElementById("cuadro-facturacion").innerHTML = `
+        <div class="titulo-cuadro">📍 Dirección de Facturación</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+          <p><strong>Nombre:</strong> ${datos.nombre || ""} ${datos.apellido || ""}</p>
+          <p><strong>Correo:</strong> ${datos.correo || ""}</p>
+          <p><strong>Teléfono:</strong> ${datos.telefono || ""}</p>
+          <p><strong>Provincia:</strong> ${datos.provincia || ""}</p>
+          <p><strong>Ciudad:</strong> ${datos.ciudad || ""}</p>
+          <p><strong>Dirección:</strong> ${datos.direccion || ""}</p>
+        </div>
+      `;
+    }
+
+    function sendConfirmation() {
+      fetch("https://backend-proyecto-x.onrender.com/guardar-confirmacion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          codigo: pedidoID,
+          nombre: datos.nombre || "",
+          telefono: datos.telefono || "",
+          ciudad: datos.ciudad || "",
+          combo: datos.combo || "",
+          correo: datos.correo || ""
+        })
+      })
+      .then(res => res.json())
+      .then(res => console.log("✅ Datos de confirmación guardados:", res))
+      .catch(err => console.error("❌ Error al guardar datos en backend:", err));
+    }
+
+    renderResumen();
+    renderDetalles();
+    renderFacturacion();
+    sendConfirmation();
+
+    window.addEventListener("beforeunload", function (e) {
+      e.preventDefault();
+      e.returnValue = "¿Estás seguro de que deseas salir o recargar esta página?";
+    });
+
+    if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
+      window.location.href = "index.html";
+    }
+  </script>
+
+  <a href="https://wa.me/593981279614?text=Hola%2C%20Sortech%20mi%20número%20de%20pedido%20es%20...." target="_blank" id="whatsapp-float">
+    <img src="img/whatsapp.png" alt="WhatsApp" />
+  </a>
+
+  <a href="index.html" class="btn-inicio">🏠 Inicio</a>
+
+</body>
+</html>
+
+
