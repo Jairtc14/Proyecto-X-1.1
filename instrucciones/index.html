@@ -501,14 +501,19 @@
     renderFacturacion();
     sendConfirmation();
 
-    window.addEventListener("beforeunload", function (e) {
-      e.preventDefault();
-      e.returnValue = "¿Estás seguro de que deseas salir o recargar esta página?";
-    });
+    // Mostrar mensaje antes de cerrar o recargar
+window.addEventListener("beforeunload", function (e) {
+  e.preventDefault();
+  e.returnValue = "¿Estás seguro de que deseas salir o recargar esta página?";
+});
 
-    if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
-      window.location.href = "index.html";
-    }
+// Detectar recarga
+const navType = performance.getEntriesByType("navigation")[0].type;
+
+if (navType === "reload") {
+  // Redirigir a raíz (o donde tú quieras)
+  window.location.href = "index.html";
+}
   </script>
 
   <a href="https://wa.me/593981279614?text=Hola%2C%20Sortech%20mi%20número%20de%20pedido%20es%20...." target="_blank" id="whatsapp-float">
@@ -519,6 +524,7 @@
 
 </body>
 </html>
+
 
 
 
