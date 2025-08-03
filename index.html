@@ -23,6 +23,14 @@
       transform: translateY(-5px);
       box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
+
+    .combo-card.deshabilitada {
+  opacity: 0.5;
+  pointer-events: none; /* No permite click */
+  filter: grayscale(70%);
+  user-select: none;
+}
+
   </style>
 </head>
 <body>
@@ -33,7 +41,6 @@
   </a>
 </header>
 
-  
 <nav>
   <ul>
     <li><a href="https://www.sortechweb.com/">Inicio</a></li>
@@ -172,6 +179,46 @@
       }
     }, 20);
   }
+
+function actualizarDisponibilidad(numerosDisponibles) {
+  const combos = document.querySelectorAll('.combo-card');
+  const mensajeCompleto = document.getElementById('mensaje-completo');
+  const seccionCombos = document.getElementById('seccion-combos');
+
+  // Mostrar u ocultar mensaje de "todos vendidos"
+  if (numerosDisponibles <= 0) {
+    mensajeCompleto.style.display = 'block';
+    seccionCombos.style.display = 'none';
+    return;
+  } else {
+    mensajeCompleto.style.display = 'none';
+    seccionCombos.style.display = 'block';
+  }
+
+  // Actualizar texto con cantidad disponible (puedes crear un elemento <p> para esto)
+  let textoDisponibles = document.getElementById('texto-disponibles');
+  if (!textoDisponibles) {
+    textoDisponibles = document.createElement('p');
+    textoDisponibles.id = 'texto-disponibles';
+    textoDisponibles.style.textAlign = 'center';
+    textoDisponibles.style.fontWeight = '600';
+    textoDisponibles.style.marginBottom = '15px';
+    textoDisponibles.style.color = '#b91c1c'; // rojo oscuro
+    seccionCombos.insertBefore(textoDisponibles, seccionCombos.querySelector('.fila-combos'));
+  }
+  textoDisponibles.textContent = `📢 Quedan solo ${numerosDisponibles} número${numerosDisponibles > 1 ? 's' : ''} disponibles`;
+
+  combos.forEach(card => {
+    const comboValue = parseInt(card.dataset.combo);
+    if (comboValue > numerosDisponibles) {
+      card.classList.add('deshabilitada');
+    } else {
+      card.classList.remove('deshabilitada');
+    }
+  });
+}
+
+  
 // Barra de Porcentaje
   async function obtenerYAnimarBarra() {
   const barra = document.querySelector(".barra-progreso");
@@ -185,6 +232,10 @@
     }
 
     animarBarraProgreso(porcentaje); // 👈 ¡IMPORTANTE!
+    
+    let disponibles = data.total - data.vendidos;
+    actualizarDisponibilidad(disponibles);
+
   } catch (err) {
     console.error("Error al obtener progreso:", err);
     barra.textContent = "Error";
@@ -241,17 +292,4 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
