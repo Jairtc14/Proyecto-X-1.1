@@ -352,6 +352,14 @@
         <div id="resultado-busqueda-numero" class="resultado"></div>
       </div>
 
+      <!-- Botón y sección: Total Vendidos -->
+      <button onclick="toggleSeccion('total-vendidos'); cargarTotalVendidos()">📊 Total Vendidos</button>
+      <div id="total-vendidos" class="seccion-codigo">
+        <div id="tabla-vendidos" class="resultado">
+          <p>Cargando...</p>
+        </div>
+      </div>
+
       <!-- Cerrar sesión -->
       <a href="login.html">Cerrar sesión</a>
     </div>
@@ -509,6 +517,53 @@
         resultadoDiv.innerHTML = "<p style='color:#ff4444'>Error al conectar con el servidor</p>";
       }
     }
+
+    // Mostrar totalidad de números vendidos
+    async function cargarTotalVendidos() {
+  const tablaDiv = document.getElementById("tabla-vendidos");
+  tablaDiv.innerHTML = "<p>Cargando...</p>";
+
+  try {
+    const respuesta = await fetch("https://backend-proyecto-x.onrender.com/todos-los-numeros");
+    const data = await respuesta.json();
+
+    if (!Array.isArray(data) || data.length === 0) {
+      tablaDiv.innerHTML = "<p style='color:#ff4444'>No hay números vendidos registrados.</p>";
+      return;
+    }
+
+    let tablaHTML = `
+      <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+        <thead>
+          <tr style="border-bottom: 1px solid #00ff00;">
+            <th style="text-align: left; padding: 5px;">Código</th>
+            <th style="text-align: left; padding: 5px;">Nombre</th>
+            <th style="text-align: left; padding: 5px;">Combo</th>
+            <th style="text-align: left; padding: 5px;">Números</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    data.forEach(item => {
+      tablaHTML += `
+        <tr>
+          <td style="padding: 5px;">${item.codigo}</td>
+          <td style="padding: 5px;">${item.nombre}</td>
+          <td style="padding: 5px;">${item.combo}</td>
+          <td style="padding: 5px;">${(item.numeros || []).join(", ")}</td>
+        </tr>
+      `;
+    });
+
+    tablaHTML += `</tbody></table>`;
+    tablaDiv.innerHTML = tablaHTML;
+
+  } catch (err) {
+    tablaDiv.innerHTML = "<p style='color:#ff4444'>Error al obtener los números vendidos</p>";
+  }
+}
+
   </script>
 </body>
 </html>
