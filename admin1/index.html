@@ -353,12 +353,18 @@
       </div>
 
       <!-- Botón y sección: Total Vendidos -->
-      <button onclick="toggleSeccion('total-vendidos'); cargarTotalVendidos()">📊 Total Vendidos</button>
-      <div id="total-vendidos" class="seccion-codigo">
-        <div id="tabla-vendidos" class="resultado">
-          <p>Cargando...</p>
+      <button id="btnTotalVendidos">📊 Total vendidos</button>
+        <div id="tablaNumeros" style="display:none; margin-top:20px; max-height: 300px; overflow-y: auto; background: rgba(0,0,0,0.8); border: 1px solid #00ff00; border-radius: 8px; padding: 10px;">
+          <table style="width: 100%; border-collapse: collapse; color: #00ff00; font-family: 'Courier New', monospace;">
+            <thead>
+              <tr>
+                <th style="border-bottom: 1px solid #00ff00; padding: 8px;">Número</th>
+              </tr>
+            </thead>
+            <tbody id="cuerpoTablaNumeros"></tbody>
+          </table>
         </div>
-      </div>
+
 
       <!-- Cerrar sesión -->
       <a href="login.html">Cerrar sesión</a>
@@ -370,10 +376,8 @@
     fetch("https://backend-proyecto-x.onrender.com")
       .then(() => console.log("🟢 Backend conectado"))
       .catch(() => console.warn("🔴 No se pudo conectar al backend"));
-  </script>
-
-  <!-- Efecto de seguimiento del mouse -->
-  <script>
+    
+      // efecto seguimiento del mouse
     const mouseGlow = document.getElementById('mouseGlow');
     
     document.addEventListener('mousemove', (e) => {
@@ -397,10 +401,8 @@
         }
       });
     });
-  </script>
 
-  <!-- Scripts funcionales originales -->
-  <script>
+  // Scripts funcionales originales
     function toggleSeccion(id) {
       const seccion = document.getElementById(id);
       // Cerrar otras secciones
@@ -519,50 +521,42 @@
     }
 
     // Mostrar totalidad de números vendidos
-    async function cargarTotalVendidos() {
-  const tablaDiv = document.getElementById("tabla-vendidos");
-  tablaDiv.innerHTML = "<p>Cargando...</p>";
-
-  try {
-    const respuesta = await fetch("https://backend-proyecto-x.onrender.com/todos-los-numeros");
-    const data = await respuesta.json();
-
-    if (!Array.isArray(data) || data.length === 0) {
-      tablaDiv.innerHTML = "<p style='color:#ff4444'>No hay números vendidos registrados.</p>";
-      return;
-    }
-
-    let tablaHTML = `
-      <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-        <thead>
-          <tr style="border-bottom: 1px solid #00ff00;">
-            <th style="text-align: left; padding: 5px;">Código</th>
-            <th style="text-align: left; padding: 5px;">Nombre</th>
-            <th style="text-align: left; padding: 5px;">Combo</th>
-            <th style="text-align: left; padding: 5px;">Números</th>
-          </tr>
-        </thead>
-        <tbody>
-    `;
-
-    data.forEach(item => {
-      tablaHTML += `
-        <tr>
-          <td style="padding: 5px;">${item.codigo}</td>
-          <td style="padding: 5px;">${item.nombre}</td>
-          <td style="padding: 5px;">${item.combo}</td>
-          <td style="padding: 5px;">${(item.numeros || []).join(", ")}</td>
-        </tr>
-      `;
+    document.getElementById('btnTotalVendidos').addEventListener('click', async () => {
+      const tablaDiv = document.getElementById('tablaNumeros');
+      const cuerpoTabla = document.getElementById('cuerpoTablaNumeros');
+    
+      // Si la tabla ya está visible, la ocultamos para que sea toggle
+      if (tablaDiv.style.display === 'block') {
+        tablaDiv.style.display = 'none';
+        return;
+      }
+    
+      try {
+        const respuesta = await fetch('https://backend-proyecto-x.onrender.com/todos-los-numeros');
+        if (!respuesta.ok) throw new Error('Error al obtener datos');
+        const numeros = await respuesta.json();
+    
+        // Limpiar tabla antes de llenar
+        cuerpoTabla.innerHTML = '';
+    
+        // Crear filas por cada número
+        numeros.forEach(num => {
+          const fila = document.createElement('tr');
+          const celda = document.createElement('td');
+          celda.textContent = num;
+          celda.style.borderBottom = '1px solid #00ff00';
+          celda.style.padding = '6px 8px';
+          fila.appendChild(celda);
+          cuerpoTabla.appendChild(fila);
+        });
+    
+        tablaDiv.style.display = 'block';
+    
+      } catch (error) {
+        alert('Error al cargar los números vendidos');
+        console.error(error);
+      }
     });
-
-    tablaHTML += `</tbody></table>`;
-    tablaDiv.innerHTML = tablaHTML;
-
-  } catch (err) {
-    tablaDiv.innerHTML = "<p style='color:#ff4444'>Error al obtener los números vendidos</p>";
-  }
-}
 
   </script>
 </body>
