@@ -553,6 +553,18 @@
                         <option value="transferencia">🏦 Transferencia/Depósito</option>
                         <option value="efectivo">💰 Efectivo</option>
                     </select>
+
+                    <div id="admin-section" style="display: none; margin-top: 20px;">
+                        <p style="color: #e74c3c; font-weight: bold; text-align: center;">
+                            ⚠️ Este apartado es solo para administradores.
+                        </p>
+                        <div class="form-group full-width">
+                            <label for="codigo-admin">Código de administrador</label>
+                            <input type="password" id="codigo-admin" name="codigo-admin" placeholder="Ingresa el código">
+                            <div class="error-message" id="codigo-admin-error">Código requerido</div>
+                        </div>
+                    </div>
+
                     <div class="error-message" id="metodo-pago-error">Por favor selecciona un método de pago</div>
                 </div>
             </div>
@@ -705,6 +717,51 @@
                 isValid = false;
             }
             
+            //  VALIDACIÓN DEL CÓDIGO ADMIN
+            if (document.getElementById('metodo-pago').value === 'efectivo') {
+                const codigoAdmin = document.getElementById('codigo-admin');
+                if (!codigoAdmin.value.trim()) {
+                    codigoAdmin.classList.add('error');
+                    document.getElementById('codigo-admin-error').style.display = 'block';
+                    isValid = false;
+                }
+            }
+            
+            // Validación del código de administrador si se selecciona efectivo
+            if (document.getElementById('metodo-pago').value === 'efectivo') {
+                const codigoAdmin = document.getElementById('codigo-admin');
+                const errorMensaje = document.getElementById('codigo-admin-error');
+            
+                try {
+                    const response = await fetch(`${BASE_URL}/verificar-codigo`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ codigo: codigoAdmin.value.trim() })
+                    });
+            
+                    const data = await response.json();
+            
+                    if (!data.valido) {
+                        codigoAdmin.classList.add('error');
+                        errorMensaje.textContent = 'Código incorrecto';
+                        errorMensaje.style.display = 'block';
+                        isValid = false;
+                    } else {
+                        codigoAdmin.classList.remove('error');
+                        errorMensaje.style.display = 'none';
+                    }
+            
+                } catch (error) {
+                    codigoAdmin.classList.add('error');
+                    errorMensaje.textContent = 'Error al verificar el código';
+                    errorMensaje.style.display = 'block';
+                    isValid = false;
+                }
+            }
+
+            
             if (isValid) {
             // Obtener los datos del formulario
             const nombre = document.getElementById("nombre").value;
@@ -823,11 +880,22 @@
             }
         });
 
-        // Ejemplo de uso (puedes remover esto y usar tus propios datos)
-        // actualizarDetalleCompra('Combo Premium', '$25.00');
+        // Mostrar formulario de admin si elige 'efectivo'
+        document.getElementById('metodo-pago').addEventListener('change', function () {
+            const adminSection = document.getElementById('admin-section');
+            if (this.value === 'efectivo') {
+                adminSection.style.display = 'block';
+            } else {
+                adminSection.style.display = 'none';
+                document.getElementById('codigo-admin').value = '';
+                document.getElementById('codigo-admin-error').style.display = 'none';
+            }
+        });
+
     </script>
 </body>
 </html>
+
 
 
 
