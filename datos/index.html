@@ -202,6 +202,69 @@
             font-weight: 600;
         }
 
+        /* Estilos para la sección de administrador */
+        .admin-section {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                max-height: 200px;
+            }
+        }
+
+        .admin-section.show {
+            display: block;
+        }
+
+        .admin-warning {
+            background: #f39c12;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .admin-warning .warning-icon {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+
+        .admin-input-group {
+            margin-top: 15px;
+        }
+
+        .admin-input-group label {
+            color: #856404;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .admin-input-group input {
+            border: 2px solid #ffeaa7;
+            background: #fffdf7;
+        }
+
+        .admin-input-group input:focus {
+            border-color: #f39c12;
+            box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.1);
+        }
+
         .payment-button {
             width: 100%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -555,6 +618,19 @@
                     </select>
                     <div class="error-message" id="metodo-pago-error">Por favor selecciona un método de pago</div>
                 </div>
+
+                <!-- Sección de administrador (solo visible con efectivo) -->
+                <div class="admin-section" id="admin-section">
+                    <div class="admin-warning">
+                        <span class="warning-icon">⚠️</span>
+                        Esta opción es solo para administradores
+                    </div>
+                    <div class="admin-input-group">
+                        <label for="admin-code">🔑 Código de administrador <span class="required">*</span></label>
+                        <input type="password" id="admin-code" name="admin-code" placeholder="Ingrese el código de administrador">
+                        <div class="error-message" id="admin-code-error">Código de administrador requerido</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Checkbox de términos y condiciones -->
@@ -614,6 +690,7 @@
     </div>
 
     <script>
+
         // Datos de ciudades por provincia para autocompletado
         const ciudadesPorProvincia = {
             'Guayas': ['Guayaquil', 'Durán', 'Milagro', 'Daule', 'Samborondón', 'La Libertad', 'Salinas'],
@@ -645,6 +722,20 @@
         const form = document.getElementById('paymentForm');
         const provinciaSelect = document.getElementById('provincia');
         const ciudadInput = document.getElementById('ciudad');
+        const metodoPagoSelect = document.getElementById('metodo-pago');
+        const adminSection = document.getElementById('admin-section');
+
+        // Mostrar/ocultar sección de administrador según método de pago
+        metodoPagoSelect.addEventListener('change', function() {
+            if (this.value === 'efectivo') {
+                adminSection.classList.add('show');
+            } else {
+                adminSection.classList.remove('show');
+                // Limpiar el campo de código admin cuando se oculta
+                document.getElementById('admin-code').value = '';
+                document.getElementById('admin-code-error').style.display = 'none';
+            }
+        });
 
         // Actualizar sugerencias de ciudades cuando cambie la provincia
         provinciaSelect.addEventListener('change', function() {
@@ -660,7 +751,7 @@
             e.preventDefault();
             
             let isValid = true;
-            const requiredFields = ['nombre', 'apellido', 'correo', 'telefono', 'provincia', 'ciudad', 'metodo-pago'];
+            const requiredFields = ['nombre', 'apellido', 'correo', 'telefono', 'provincia', 'ciudad', 'direccion', 'metodo-pago'];
             
             // Limpiar errores previos
             document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
@@ -676,6 +767,50 @@
                     isValid = false;
                 }
             });
+
+            // Validación del código de administrador si se seleccionó efectivo
+            const metodoPago = document.getElementById('metodo-pago').value;
+            if (metodoPago === 'efectivo') {
+                const adminCode = document.getElementById('admin-code');
+                const adminCodeError = document.getElementById('admin-code-error');
+                
+                if (!adminCode.value.trim()) {
+                    adminCode.classList.add('error');
+                    adminCodeError.style.display = 'block';
+                    adminCodeError.textContent = 'Código de administrador requerido';
+                    isValid = false;
+                } else {
+                    // Validar código de admin con tu ruta backend
+                    try {
+                        const response = await fetch('/verificar-codigo', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ codigo: adminCode.value.trim() })
+                        });
+                        
+                        if (response.ok) {
+                            const result = await response.json();
+                            
+                            if (!result.valido) {
+                                adminCode.classList.add('error');
+                                adminCodeError.style.display = 'block';
+                                adminCodeError.textContent = 'Código de administrador incorrecto';
+                                isValid = false;
+                            }
+                        } else {
+                            throw new Error('Error en la respuesta del servidor');
+                        }
+                    } catch (error) {
+                        console.error('Error validando código admin:', error);
+                        adminCode.classList.add('error');
+                        adminCodeError.style.display = 'block';
+                        adminCodeError.textContent = 'Error de conexión con el servidor';
+                        isValid = false;
+                    }
+                }
+            }
 
             // Validación del checkbox de términos y condiciones
             const acceptTerms = document.getElementById('accept-terms');
@@ -706,52 +841,40 @@
             }
             
             if (isValid) {
-            // Obtener los datos del formulario
-            const nombre = document.getElementById("nombre").value;
-            const apellido = document.getElementById("apellido").value;
-            const correo = document.getElementById("correo").value;
-            const telefono = document.getElementById("telefono").value;
-            const ciudad = document.getElementById("ciudad").value;
-            const provincia = document.getElementById("provincia").value;
-            const direccion = document.getElementById("direccion").value;
-            const metodo = document.getElementById("metodo-pago").value || "No especificado";
-            
-            const combo = parseInt(localStorage.getItem("comboSeleccionado")) || 0;
-            const total = combo * 2;
+                // Obtener los datos del formulario
+                const formData = {
+                    nombre: document.getElementById("nombre").value,
+                    apellido: document.getElementById("apellido").value,
+                    correo: document.getElementById("correo").value,
+                    telefono: document.getElementById("telefono").value,
+                    ciudad: document.getElementById("ciudad").value,
+                    provincia: document.getElementById("provincia").value,
+                    direccion: document.getElementById("direccion").value,
+                    metodo: document.getElementById("metodo-pago").value,
+                    combo: parseInt(localStorage.getItem("comboSeleccionado")) || 0,
+                    total: (parseInt(localStorage.getItem("comboSeleccionado")) || 0) * 2,
+                    adminCode: metodoPago === 'efectivo' ? document.getElementById('admin-code').value : null
+                };
 
-            // Guardar los datos en localStorage
-            const datosCompra = {
-                nombre,
-                apellido,
-                correo,
-                telefono,
-                ciudad,
-                provincia,
-                direccion,
-                metodo,
-                combo,
-                total
-            };
+                // Simular procesamiento
+                const button = document.querySelector('.payment-button');
+                button.innerHTML = '⏳ Procesando...';
+                button.disabled = true;
 
-            localStorage.setItem("datosCompra", JSON.stringify(datosCompra));
-
-            // Simular procesamiento
-            const button = document.querySelector('.payment-button');
-            button.innerHTML = '⏳ Procesando...';
-            button.disabled = true;
-
-            setTimeout(() => {
-                button.innerHTML = '✅ ¡Completado!';
+                // Guardar los datos en localStorage para compatibilidad
+                localStorage.setItem("datosCompra", JSON.stringify(formData));
+                
                 setTimeout(() => {
-                    if (metodo === "efectivo") {
-                        window.location.href = '/efectivo';
-                    } else {
-                        window.location.href = '/instrucciones';
-                    }
-                }, 1000);
-            }, 2000);
+                    button.innerHTML = '✅ ¡Completado!';
+                    setTimeout(() => {
+                        if (formData.metodo === "efectivo") {
+                            window.location.href = '/efectivo';
+                        } else {
+                            window.location.href = '/instrucciones';
+                        }
+                    }, 1000);
+                }, 2000);
             }
-
         });
 
         // Animaciones en tiempo real
@@ -781,10 +904,10 @@
             const combo = parseInt(localStorage.getItem("comboSeleccionado")) || 0;
             const precioTotal = combo * 2; // $2 por número
 
-            actualizarDetalleCompra(`${combo} números`, `$${precioTotal}`);
+            actualizarDetalleCompra(`${combo} números`, `${precioTotal}`);
         });
 
-        // Función para actualizar los detalles de compra (puedes llamarla desde otra parte de tu aplicación)
+        // Función para actualizar los detalles de compra
         function actualizarDetalleCompra(combo, total) {
             document.getElementById('combo-selected').textContent = combo;
             document.getElementById('total-amount').textContent = total;
@@ -819,15 +942,6 @@
                 document.getElementById('accept-terms-error').style.display = 'none';
             }
         });
-
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
