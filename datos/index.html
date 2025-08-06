@@ -782,7 +782,7 @@
                 } else {
                     // Validar código de admin con tu ruta backend
                     try {
-                        const response = await fetch('/verificar-codigo', {
+                        const response = await fetch('https://backend-proyecto-x.onrender.com/verificar-codigo', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -945,3 +945,4 @@
     </script>
 </body>
 </html>
+
