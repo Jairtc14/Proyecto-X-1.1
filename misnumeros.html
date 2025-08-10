@@ -367,7 +367,7 @@
     <div class="resultado" id="resultado"></div>
   </div>
 
-  <a href="index.html" class="home-btn">🏠 Inicio</a>
+  <a href="https://sortechweb.com" class="home-btn">🏠 Inicio</a>
 
   <script>
     async function consultarNumeros() {
@@ -383,22 +383,24 @@
         return;
       }
 
-      // Loading state
       button.disabled = true;
       btnText.innerHTML = '<span class="loading"></span>Consultando...';
       
       try {
         const res = await fetch(`https://backend-proyecto-x.onrender.com/consultar-por-correo/${correo}`);
-        
-        if (!res.ok) throw new Error("No se encontraron datos para este correo");
-        
         const data = await res.json();
-        
-        if (data.length === 0) {
-          resultado.innerHTML = '<div class="no-results">📭 No se encontraron códigos registrados para este correo.</div>';
-        } else {
+
+        resultado.innerHTML = '';
+
+        if (data.status === "no-encontrado") {
+          resultado.innerHTML = `<div class="no-results">📭 ${data.mensaje}</div>`;
+        } 
+        else if (data.status === "pendiente") {
+          resultado.innerHTML = `<div class="error-message">⚠️ ${data.mensaje}</div>`;
+        } 
+        else if (data.status === "ok") {
           let delay = 0;
-          data.forEach(item => {
+          data.data.forEach(item => {
             setTimeout(() => {
               const div = document.createElement('div');
               div.className = 'codigo-box';
@@ -410,17 +412,20 @@
             }, delay);
             delay += 100;
           });
+        } 
+        else {
+          resultado.innerHTML = `<div class="error-message">❌ Ocurrió un error inesperado</div>`;
         }
+
       } catch (err) {
-        resultado.innerHTML = `<div class="error-message">❌ ${err.message}</div>`;
+        resultado.innerHTML = `<div class="error-message">❌ Error en la conexión con el servidor</div>`;
       } finally {
-        // Reset button
         button.disabled = false;
         btnText.innerHTML = 'Consultar';
       }
     }
 
-    // Add enter key support and floating label functionality
+    // Etiqueta flotante + enter
     const emailInput = document.getElementById('correo');
     const emailLabel = document.querySelector('.input-label');
     
