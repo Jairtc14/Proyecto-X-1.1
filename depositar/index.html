@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cómo realizar un depósito</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Reutilizando estilos base */
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+    }
+
+    h1 {
+      font-size: clamp(24px, 5vw, 36px);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 30px;
+      color: white;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .cuadro {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 25px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .titulo-cuadro {
+      font-weight: 600;
+      margin-bottom: 20px;
+      font-size: 1.3em;
+      color: #2d3748;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .titulo-cuadro::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 2px;
+    }
+
+    ol {
+      padding-left: 20px;
+      line-height: 1.7;
+    }
+
+    ol li {
+      margin-bottom: 12px;
+    }
+
+    .btn-inicio {
+      display: inline-block;
+      background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      margin-top: 20px;
+      box-shadow: 0 8px 25px rgba(31, 41, 55, 0.3);
+    }
+
+    .btn-inicio:hover {
+      background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📌 Cómo realizar un depósito</h1>
+
+    <div class="cuadro">
+            <img src="/img/logo_bcpich.png" alt="Banco Pichincha Logo" />      
+      <ol>
+        <li>Acércate al banco del barrio más cercano del Banco Pichincha.</li>
+        <li>Solicita realizar un <strong>depósito a cuenta de ahorros</strong>.</li>
+        <li>Proporciona el número de cuenta: <strong>7700056444</strong>.</li>
+        <li>Indica el nombre del titular: <strong>Tomala Correa Jair Valentino</strong>.</li>
+        <li>Entrega el monto exacto a depositar al cajero.</li>
+        <li>Verifica que en el comprobante aparezcan correctamente los datos de la cuenta.</li>
+        <li>Conserva el comprobante y envíalo por WhatsApp junto con tu número de pedido.</li>
+      </ol>
+    </div>
+
+    <div class="cuadro">
+        <img src="/img/logo_bcgye.png" alt="Banco Guayaquil Logo" />
+      <ol>
+        <li>Acércate al banco del barrio más cercano del Banco Guayaquil.</li>
+        <li>Solicita realizar un <strong>depósito a cuenta de ahorros</strong>.</li>
+        <li>Indica el número de cuenta: <strong>0126670920</strong>.</li>
+        <li>Nombre del titular: <strong>Tomala Correa Jair Valentino</strong>.</li>
+        <li>Entrega el monto exacto a depositar.</li>
+        <li>Confirma que los datos impresos en el comprobante sean correctos.</li>
+        <li>Guarda el comprobante y envíalo por WhatsApp con tu número de pedido.</li>
+      </ol>
+    </div>
+
+    <div style="text-align:center;">
+      <a href="https://www.sortechweb.com" class="btn-inicio">🏠 Volver al inicio</a>
+    </div>
+  </div>
+</body>
+</html>
