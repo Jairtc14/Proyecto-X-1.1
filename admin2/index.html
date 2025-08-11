@@ -412,8 +412,40 @@
         <div id="resultado-confirmacion" class="resultado"></div>
       </div>
       --!>
+
+      <!-- Botón y sección unificada: Total Vendidos -->
+      <button id="btnTotalVendidos">📊 Total vendidos</button>
+
+      <div id="contenedorTotalVendidos" style="display:none; margin-top:20px;">
+        <div id="tablaNumeros" style="max-height: 300px; overflow-y: auto; background: rgba(0,0,0,0.8); border: 1px solid #00ff00; border-radius: 8px; padding: 10px;">
+          <table style="width: 100%; border-collapse: collapse; color: #00ff00; font-family: 'Courier New', monospace;" aria-label="Números vendidos">
+            <thead>
+              <tr>
+                <th style="border-bottom: 1px solid #00ff00; padding: 8px;">Número</th>
+                <th style="border-bottom: 1px solid #00ff00; padding: 8px;">Número</th>
+                <th style="border-bottom: 1px solid #00ff00; padding: 8px;">Número</th>
+                <th style="border-bottom: 1px solid #00ff00; padding: 8px;">Número</th>
+                <th style="border-bottom: 1px solid #00ff00; padding: 8px;">Número</th>
+              </tr>
+            </thead>
+            <tbody id="cuerpoTablaNumeros"></tbody>
+          </table>
+        </div>
+
+        <!-- contadores vendidos-faltantes -->
+        <div id="contador-numeros" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 20px;">
+          <div style="background-color: #111; border: 2px solid #00ff00; border-radius: 10px; padding: 20px; width: 200px; text-align: center;">
+            <p style="color: #00ff00; font-size: 18px; margin-bottom: 8px;">Vendidos</p>
+            <p id="contadorVendidos" style="color: #00ff00; font-size: 28px; margin: 0;">0</p>
+          </div>
+          <div style="background-color: #111; border: 2px solid #ff0000; border-radius: 10px; padding: 20px; width: 200px; text-align: center;">
+            <p style="color: #ff0000; font-size: 18px; margin-bottom: 8px;">Faltantes</p>
+            <p id="contadorRestantes" style="color: #ff0000; font-size: 28px; margin: 0;">0</p>
+          </div>
+        </div>
+
       <!-- Cerrar sesión -->
-      <a href="/sesion" class="logout-btn">🚪 CERRAR SESIÓN</a>
+      <a href="https://sortechweb.com" class="logout-btn">🚪 CERRAR SESIÓN</a>
     </div>
   </div>
 
