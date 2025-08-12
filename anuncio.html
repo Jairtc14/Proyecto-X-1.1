@@ -2,14 +2,30 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prueba Anuncio Social Bar</title>
+  <title>Mostrar anuncio con botón</title>
 </head>
 <body>
-  <h1>Prueba de anuncio Social Bar de Adsterra</h1>
-  <p>En esta página debería aparecer el Social Bar en la esquina inferior derecha (o según configuración de Adsterra).</p>
 
-  <!-- Script Social Bar de Adsterra -->
-  <script type="text/javascript" src="//pl27404823.profitableratecpm.com/7b/15/28/7b15286600a581856d9f39132d23e560.js"></script>
+  <button id="mostrarAnuncioBtn">Ver anuncio para número gratis</button>
+
+  <div id="contenedorAnuncio"></div>
+
+  <script>
+    document.getElementById('mostrarAnuncioBtn').addEventListener('click', function() {
+      // Crear el script del anuncio
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = '//pl27404823.profitableratecpm.com/7b/15/28/7b15286600a581856d9f39132d23e560.js';
+      script.async = true;
+
+      // Insertar el script dentro del contenedor
+      document.getElementById('contenedorAnuncio').appendChild(script);
+
+      // Opcional: deshabilitar el botón para evitar múltiples clics
+      this.disabled = true;
+      this.innerText = 'Anuncio cargado';
+    });
+  </script>
+
 </body>
 </html>
