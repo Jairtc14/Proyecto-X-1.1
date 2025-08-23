@@ -337,8 +337,8 @@ function actualizarDisponibilidad(numerosDisponibles) {
     const mensaje = document.getElementById("mensaje-error");
     const valor = parseInt(input.value);
 
-    if (isNaN(valor) || valor < 20 || valor > 200) {
-      mensaje.textContent = "La cantidad debe ser entre 20 y 200.";
+    if (isNaN(valor) || valor < 20 || valor > 150) {
+      mensaje.textContent = "La cantidad debe ser menor a 100.";
       mensaje.style.display = "block";
     } else {
       mensaje.style.display = "none";
@@ -381,5 +381,6 @@ function actualizarDisponibilidad(numerosDisponibles) {
 
 </body>
 </html>
+
 
 
