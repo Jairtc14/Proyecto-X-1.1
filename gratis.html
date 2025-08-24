@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Participa en el Sorteo - Solo Clientes VIP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-section {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            border-left: 5px solid #28a745;
+        }
+
+        .result-section.error {
+            background: linear-gradient(135deg, #ffe6e6, #ffcccc);
+            border-left-color: #dc3545;
+        }
+
+        .result-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .data-item {
+            display: contents;
+        }
+
+        .data-label {
+            font-weight: 600;
+            color: #555;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+        }
+
+        .data-value {
+            color: #333;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        .participation-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            margin-top: 20px;
+        }
+
+        .participation-btn:hover {
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-info {
+            background: #cce7ff;
+            color: #0066cc;
+            border-left: 4px solid #0066cc;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .combo-info {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #ffc107;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .data-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .data-label, .data-value {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎁 Sorteo Exclusivo</h1>
+            <p>Solo para clientes que compraron combos del sorteo actual</p>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>ℹ️ Importante:</strong> Solo puedes participar si has comprado un combo del sorteo actual. Ingresa tu código de pedido para verificar tu elegibilidad.
+        </div>
+
+        <div class="form-section">
+            <div class="form-group">
+                <label for="orderCode">Código de Pedido:</label>
+                <input 
+                    type="text" 
+                    id="orderCode" 
+                    placeholder="Ej: PX001234"
+                    maxlength="20"
+                />
+            </div>
+            
+            <button class="btn" id="verifyBtn" onclick="verifyOrder()">
+                <span id="btnText">Verificar Código</span>
+                <div id="btnLoading" class="loading" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    Verificando...
+                </div>
+            </button>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <h3 id="resultTitle">Datos del Pedido</h3>
+            <div class="data-grid" id="dataGrid">
+                <!-- Los datos se llenarán aquí dinámicamente -->
+            </div>
+            <button class="btn participation-btn" id="participateBtn" onclick="participateInRaffle()" style="display: none;">
+                🎲 ¡Participar en el Sorteo!
+            </button>
+        </div>
+    </div>
+
+    <script>
+
+        function verifyOrder() {
+            const orderCode = document.getElementById('orderCode').value.trim();
+            const resultSection = document.getElementById('resultSection');
+            const verifyBtn = document.getElementById('verifyBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoading = document.getElementById('btnLoading');
+
+            if (!orderCode) {
+                showError('Por favor, ingresa un código de pedido válido.');
+                return;
+            }
+
+            // Mostrar loading
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'flex';
+            verifyBtn.disabled = true;
+
+            // Simular consulta al backend
+            setTimeout(() => {
+                const orderData = ordersDatabase[orderCode];
+
+                if (orderData && orderData.valid) {
+                    showOrderData(orderData);
+                } else {
+                    showError('Código no válido o no elegible para el sorteo actual.');
+                }
+
+                // Ocultar loading
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+                verifyBtn.disabled = false;
+            }, 1500);
+        }
+
+        function showOrderData(data) {
+            const resultSection = document.getElementById('resultSection');
+            const resultTitle = document.getElementById('resultTitle');
+            const dataGrid = document.getElementById('dataGrid');
+            const participateBtn = document.getElementById('participateBtn');
+
+            resultSection.className = 'result-section';
+            resultSection.style.display = 'block';
+            resultTitle.textContent = '✅ Pedido Verificado - Elegible para Sorteo';
+
+            dataGrid.innerHTML = `
+                <div class="data-item">
+                    <div class="data-label">👤 Cliente:</div>
+                    <div class="data-value">${data.cliente}</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">📧 Email:</div>
+                    <div class="data-value">${data.email}</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">📱 Teléfono:</div>
+                    <div class="data-value">${data.telefono}</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">🍽️ Combo:</div>
+                    <div class="data-value">${data.combo}</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">📅 Fecha Pedido:</div>
+                    <div class="data-value">${data.fechaPedido}</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">💰 Total Pagado:</div>
+                    <div class="data-value">${data.total}</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">📍 Ciudad:</div>
+                    <div class="data-value">${data.direccion}</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">📋 Estado:</div>
+                    <div class="data-value">${data.estado}</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">🎟️ Participaciones:</div>
+                    <div class="data-value">${data.participaciones} boletos</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">🔢 Números Asignados:</div>
+                    <div class="data-value">${data.numeros ? data.numeros.join(', ') : 'No disponible'}</div>
+                </div>
+            `;
+
+            // Mostrar info del sorteo actual
+            const sorteoInfo = document.createElement('div');
+            sorteoInfo.className = 'combo-info';
+            sorteoInfo.innerHTML = `
+                <strong>🏆 ¡Excelente!</strong> Tu código <strong>"${data.codigo}"</strong> está confirmado y te da derecho a <strong>${data.participaciones} participaciones</strong> en el sorteo ${data.codigoSorteo || 'actual'}.
+                <br><br>
+                <strong>🎲 Números del sorteo:</strong> ${data.numeros ? data.numeros.join(', ') : 'Generados automáticamente'}
+            `;
+            dataGrid.appendChild(sorteoInfo);
+
+            participateBtn.style.display = 'block';
+        }
+
+        function showPendingConfirmation(data, mensaje) {
+            const resultSection = document.getElementById('resultSection');
+            const resultTitle = document.getElementById('resultTitle');
+            const dataGrid = document.getElementById('dataGrid');
+            const participateBtn = document.getElementById('participateBtn');
+
+            resultSection.className = 'result-section';
+            resultSection.style.display = 'block';
+            resultTitle.textContent = '⏳ Código Encontrado - Pendiente de Confirmación';
+
+            dataGrid.innerHTML = `
+                <div class="data-item">
+                    <div class="data-label">👤 Cliente:</div>
+                    <div class="data-value">${data.nombre}</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">📱 Teléfono:</div>
+                    <div class="data-value">${data.telefono}</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">🍽️ Combo:</div>
+                    <div class="data-value">Combo ${data.combo} números</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">📋 Estado:</div>
+                    <div class="data-value">${data.estado}</div>
+                </div>
+            `;
+
+            // Mostrar mensaje de espera
+            const waitingInfo = document.createElement('div');
+            waitingInfo.className = 'combo-info';
+            waitingInfo.style.background = 'linear-gradient(135deg, #fff3cd, #ffeaa7)';
+            waitingInfo.style.borderLeftColor = '#ffc107';
+            waitingInfo.innerHTML = `
+                <strong>⚠️ Acción Requerida:</strong><br>
+                ${mensaje}
+                <br><br>
+                <strong>📲 WhatsApp:</strong> Una vez confirmado tu pago, podrás participar en el sorteo.
+            `;
+            dataGrid.appendChild(waitingInfo);
+
+            // No mostrar botón de participar
+            participateBtn.style.display = 'none';
+        }
+
+        function showError(message) {
+            const resultSection = document.getElementById('resultSection');
+            const resultTitle = document.getElementById('resultTitle');
+            const dataGrid = document.getElementById('dataGrid');
+            const participateBtn = document.getElementById('participateBtn');
+
+            resultSection.className = 'result-section error';
+            resultSection.style.display = 'block';
+            resultTitle.textContent = '❌ Error de Verificación';
+
+            dataGrid.innerHTML = `
+                <div style="grid-column: 1 / -1; padding: 20px; text-align: center;">
+                    <p style="color: #dc3545; font-size: 1.1rem; margin-bottom: 15px;">
+                        <strong>${message}</strong>
+                    </p>
+                    <p style="color: #666; font-size: 0.9rem;">
+                        • Verifica que el código esté escrito correctamente<br>
+                        • Asegúrate de haber comprado un combo del sorteo actual<br>
+                        • El pedido debe estar entregado para ser elegible
+                    </p>
+                </div>
+            `;
+
+            participateBtn.style.display = 'none';
+        }
+
+        function participateInRaffle() {
+            const participateBtn = document.getElementById('participateBtn');
+            const orderCode = document.getElementById('orderCode').value.trim();
+            
+            participateBtn.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    Procesando participación...
+                </div>
+            `;
+            participateBtn.disabled = true;
+
+            // 🔄 ENVIAR PARTICIPACIÓN A TU BACKEND
+            fetch('https://backend-proyecto-x.onrender.com/participar-sorteo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ codigo: orderCode })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.participacion) {
+                    // ✅ Participación exitosa
+                    const alertSuccess = document.createElement('div');
+                    alertSuccess.className = 'alert alert-success';
+                    alertSuccess.innerHTML = `
+                        <strong>🎉 ¡Participación Exitosa!</strong><br>
+                        ${data.mensaje}<br><br>
+                        <strong>📋 Detalles de tu participación:</strong><br>
+                        • <strong>Número de confirmación:</strong> ${data.numeroConfirmacion}<br>
+                        • <strong>Participante:</strong> ${data.detalles.nombre}<br>
+                        • <strong>Código:</strong> ${data.detalles.codigo}<br>
+                        • <strong>Boletos:</strong> ${data.detalles.boletos} participaciones<br>
+                        • <strong>Sorteo:</strong> ${data.detalles.sorteo}<br>
+                        • <strong>Fecha:</strong> ${data.detalles.fechaParticipacion}
+                    `;
+                    
+                    document.querySelector('.result-section').appendChild(alertSuccess);
+                    
+                    participateBtn.innerHTML = '✅ Ya Participas en el Sorteo';
+                    participateBtn.style.background = 'linear-gradient(135deg, #6c757d, #5a6268)';
+                    participateBtn.disabled = true;
+                } else {
+                    throw new Error(data.mensaje);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const alertError = document.createElement('div');
+                alertError.className = 'alert alert-info';
+                alertError.style.background = '#ffe6e6';
+                alertError.style.color = '#dc3545';
+                alertError.style.borderLeftColor = '#dc3545';
+                alertError.innerHTML = `
+                    <strong>❌ Error en la Participación:</strong><br>
+                    ${error.message || 'No se pudo registrar la participación. Inténtalo de nuevo.'}
+                `;
+                
+                document.querySelector('.result-section').appendChild(alertError);
+                
+                // Restaurar botón para intentar de nuevo
+                participateBtn.innerHTML = '🎲 ¡Participar en el Sorteo!';
+                participateBtn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                participateBtn.disabled = false;
+            });
+        }
+
+        function formatDate(dateString) {
+            // Si la fecha ya viene formateada del backend, devolverla tal como está
+            if (typeof dateString === 'string' && dateString.includes('de')) {
+                return dateString;
+            }
+            
+            // Si es una fecha que necesita formato
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-EC', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        }
+
+        // Permitir verificar con Enter
+        document.getElementById('orderCode').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                verifyOrder();
+            }
+        });
+
+        // Formatear código mientras se escribe
+        document.getElementById('orderCode').addEventListener('input', function(e) {
+            let value = e.target.value.toUpperCase();
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
