@@ -253,7 +253,7 @@
                 <input 
                     type="text" 
                     id="orderCode" 
-                    placeholder="Ej: PX001234"
+                    placeholder="Ej: CMB-2024-001234"
                     maxlength="20"
                 />
             </div>
@@ -280,6 +280,7 @@
 
     <script>
 
+
         function verifyOrder() {
             const orderCode = document.getElementById('orderCode').value.trim();
             const resultSection = document.getElementById('resultSection');
@@ -297,21 +298,45 @@
             btnLoading.style.display = 'flex';
             verifyBtn.disabled = true;
 
-            // Simular consulta al backend
-            setTimeout(() => {
-                const orderData = ordersDatabase[orderCode];
-
-                if (orderData && orderData.valid) {
-                    showOrderData(orderData);
-                } else {
-                    showError('Código no válido o no elegible para el sorteo actual.');
-                }
-
-                // Ocultar loading
-                btnText.style.display = 'inline';
-                btnLoading.style.display = 'none';
-                verifyBtn.disabled = false;
-            }, 1500);
+            // 🔄 CONSULTA A TU RUTA DE BACKEND
+            fetch(`https://backend-proyecto-x.onrender.com/verificar-sorteo/${orderCode}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.elegible && data.datos) {
+                        // ✅ Código elegible para sorteo
+                        const orderData = {
+                            cliente: data.datos.nombre,
+                            email: data.datos.correo,
+                            telefono: data.datos.telefono,
+                            combo: data.datos.combo,
+                            fechaPedido: data.datos.fechaCompra,
+                            total: data.datos.total,
+                            direccion: data.datos.ciudad,
+                            participaciones: data.datos.participaciones,
+                            codigo: data.datos.codigo,
+                            estado: data.datos.estado,
+                            numeros: data.datos.numeros,
+                            codigoSorteo: data.datos.codigoSorteo
+                        };
+                        showOrderData(orderData);
+                    } else if (!data.elegible && data.razon === 'no_confirmado' && data.datos) {
+                        // ⚠️ Código existe pero no confirmado
+                        showPendingConfirmation(data.datos, data.mensaje);
+                    } else {
+                        // ❌ Código no encontrado u otro error
+                        showError(data.mensaje || 'Código no válido o no elegible para el sorteo actual.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showError('Error de conexión. Verifica tu internet e inténtalo de nuevo.');
+                })
+                .finally(() => {
+                    // Ocultar loading
+                    btnText.style.display = 'inline';
+                    btnLoading.style.display = 'none';
+                    verifyBtn.disabled = false;
+                });
         }
 
         function showOrderData(data) {
@@ -465,7 +490,7 @@
             participateBtn.disabled = true;
 
             // 🔄 ENVIAR PARTICIPACIÓN A TU BACKEND
-            fetch('https://backend-proyecto-x.onrender.com/participar-sorteo', {
+            fetch('http://localhost:3000/participar-sorteo', { // 🔄 Cambia por tu URL de producción
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
