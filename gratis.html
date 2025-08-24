@@ -490,7 +490,7 @@
             participateBtn.disabled = true;
 
             // 🔄 ENVIAR PARTICIPACIÓN A TU BACKEND
-            fetch('http://localhost:3000/participar-sorteo', { // 🔄 Cambia por tu URL de producción
+            fetch('https://backend-proyecto-x.onrender.com/participar-sorteo', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -575,3 +575,4 @@
     </script>
 </body>
 </html>
+
