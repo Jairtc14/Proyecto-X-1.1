@@ -388,6 +388,8 @@ overflow: hidden;
   text-align: center;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   text-transform: uppercase;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .combo-card.cargando {
@@ -422,6 +424,8 @@ overflow: hidden;
     linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
           mask-composite: exclude; /* para cortar dentro */
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* animación de desplazamiento */
@@ -626,5 +630,6 @@ padding: 0 15px !important;
   from { opacity: 1; transform: translateY(0); }
   to { opacity: 0; transform: translateY(-20px); }
 }
+
 
 
