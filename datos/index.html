@@ -902,7 +902,7 @@
         // MULTIPLICAR NUMEROS POR EL VALOR SELECCIONADO
         document.addEventListener("DOMContentLoaded", () => {
             const combo = parseInt(localStorage.getItem("comboSeleccionado")) || 0;
-            const precioTotal = combo * 2; // $2 por número
+            const precioTotal = combo * 1; // $2 por número
 
             actualizarDetalleCompra(`${combo} números`, `${precioTotal}`);
         });
@@ -945,5 +945,6 @@
     </script>
 </body>
 </html>
+
 
 
