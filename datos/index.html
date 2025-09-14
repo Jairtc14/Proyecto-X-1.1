@@ -852,7 +852,7 @@
                     direccion: document.getElementById("direccion").value,
                     metodo: document.getElementById("metodo-pago").value,
                     combo: parseInt(localStorage.getItem("comboSeleccionado")) || 0,
-                    total: (parseInt(localStorage.getItem("comboSeleccionado")) || 0) * 2,
+                    total: (parseInt(localStorage.getItem("comboSeleccionado")) || 0) * 1,
                     adminCode: metodoPago === 'efectivo' ? document.getElementById('admin-code').value : null
                 };
 
@@ -945,6 +945,7 @@
     </script>
 </body>
 </html>
+
 
 
 
