@@ -121,38 +121,100 @@
 
 <div id="seccion-combos">
   <h3 class="texto-centrado3">¡Adquiere tus números!</h3>
-  <p class="texto-centrado3">Valor por unidad $2</p>
+  <p class="texto-centrado3"><s>Valor por unidad $2</s>></p>
+
+  
+<div id="countdown" style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
+    <div class="time-box" id="daysBox">
+      <span id="days">0</span>
+      <small>Días</small>
+    </div>
+    <div class="time-box" id="hoursBox">
+      <span id="hours">0</span>
+      <small>Horas</small>
+    </div>
+    <div class="time-box" id="minutesBox">
+      <span id="minutes">0</span>
+      <small>Minutos</small>
+    </div>
+    <div class="time-box" id="secondsBox">
+      <span id="seconds">0</span>
+      <small>Segundos</small>
+    </div>
+  </div>
+
+<style>
+  .time-box {
+    background: #f5f5f5;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    text-align: center;
+    font-family: Arial, sans-serif;
+    width: 80px;
+    transition: transform 0.5s ease;
+  }
+
+  .time-box span {
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+    color: #d32f2f;
+  }
+
+  .time-box small {
+    font-size: 12px;
+    color: #555;
+  }
+
+  /* Animación flip hacia arriba */
+  .flip {
+    animation: flipUp 0.6s ease;
+  }
+
+  @keyframes flipUp {
+    0%   { transform: rotateX(0deg); }
+    50%  { transform: rotateX(-90deg); opacity: 0.6; }
+    100% { transform: rotateX(0deg); opacity: 1; }
+  }
+</style
+
 
   <div class="fila-combos">
-    <div class="combo-card" data-combo="1">
+    <div class="combo-card cargando" data-combo="1">
+      <span class="ribbon">OFERTA</span>
       <h4>x1 número</h4>
-      <p>$2 (a $2 c/u)</p>
+      <p>$1 <s>(a $2 c/u)</p>
       <a href="#" class="btn-comprar">Comprar</a>
     </div>
     <div class="combo-card" data-combo="3">
-     <!-- <span class="ribbon">OFERTA</span> -->
+      <span class="ribbon">OFERTA</span>
       <h4>x3 números</h4>
-      <p>$6 (a$2 c/u)</p>
+      <p>$3 <s>(a $2 c/u)</p>
       <a href="#" class="btn-comprar">Comprar</a>
     </div>
-    <div class="combo-card" data-combo="5">
+    <div class="combo-card cargando" data-combo="5">
       <h4>x5 números</h4>
-      <p>$10 (a $2 c/u)</p>
+      <span class="ribbon">OFERTA</span>
+      <p>$5 <s>(a $2 c/u)</p>
       <a href="#" class="btn-comprar">Comprar</a>
     </div>
-    <div class="combo-card" data-combo="10">
+    <div class="combo-card cargando" data-combo="10">
       <h4>x10 números</h4>
-      <p>$20 (a $2 c/u)</p>
+      <span class="ribbon">OFERTA</span>
+      <p>$10 <s>(a $2 c/u)</p>
       <a href="#" class="btn-comprar">Comprar</a>
     </div>
-    <div class="combo-card" data-combo="15">
+    <div class="combo-card cargando" data-combo="15">
       <h4>x15 números</h4>
-      <p>$30 (a $2 c/u)</p>
+      <span class="ribbon">OFERTA</span>
+      <p>$15 <s>(a $2 c/u)</p>
       <a href="#" class="btn-comprar">Comprar</a>
     </div>
-    <div class="combo-card" data-combo="20">
+    <div class="combo-card cargando" data-combo="20">
       <h4>x20 números</h4>
-      <p>$40 (a $2 c/u)</p>
+      <span class="ribbon">OFERTA</span>
+      <p>$20 <s>(a $2 c/u)</p>
       <a href="#" class="btn-comprar">Comprar</a>
     </div>
   </div>
@@ -378,10 +440,60 @@ function actualizarDisponibilidad(numerosDisponibles) {
       localStorage.removeItem('ultimaActualizacionBarra'); // Limpiar después de cargar
     }
   });
+
+    // Fecha objetivo (Viernes 19 de septiembre 2025 a las 23:59:59)
+   const targetDate = new Date("Sep 19, 2025 23:59:59").getTime();
+
+  const boxes = {
+    days: document.getElementById("daysBox"),
+    hours: document.getElementById("hoursBox"),
+    minutes: document.getElementById("minutesBox"),
+    seconds: document.getElementById("secondsBox")
+  };
+
+  const values = {
+    days: document.getElementById("days"),
+    hours: document.getElementById("hours"),
+    minutes: document.getElementById("minutes"),
+    seconds: document.getElementById("seconds")
+  };
+
+  function updateBox(box, el, newValue) {
+    if (el.textContent != newValue) {
+      el.textContent = newValue;
+      if (box !== boxes.seconds) {
+      box.classList.add("flip");
+      setTimeout(() => box.classList.remove("flip"), 600); // reset animación
+      }
+    }
+  }
+
+  const interval = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+
+    if (distance <= 0) {
+      clearInterval(interval);
+      document.getElementById("countdown").innerHTML = "⏰ ¡El tiempo ha terminado!";
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    updateBox(boxes.days, values.days, days);
+    updateBox(boxes.hours, values.hours, hours);
+    updateBox(boxes.minutes, values.minutes, minutes);
+    values.seconds.textContent = seconds;
+  }, 1000);
+    
 </script>
 
 </body>
 </html>
+
 
 
 
