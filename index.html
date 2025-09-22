@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SORTECH - Sitio cerrado</title>
+  <meta name="description" content="SORTECH - Sitio cerrado. Gracias por su apoyo. Todos los fondos recaudados fueron reembolsados." />
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#06b6d4;--muted:#94a3b8}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
+    body{background:linear-gradient(180deg, #071022 0%, #071827 60%);color:#e6eef6;display:flex;align-items:center;justify-content:center;padding:32px}
+    .card{max-width:880px;width:100%;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:34px;box-shadow:0 8px 30px rgba(2,6,23,0.7);border:1px solid rgba(255,255,255,0.03);display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:center}
+    @media (max-width:800px){.card{grid-template-columns:1fr;padding:22px} .hero-img{display:none}}
+    h1{margin:0;font-size:28px;letter-spacing:-0.02em}
+    p{color:var(--muted);margin:12px 0 18px;line-height:1.5}
+    .notice{background:linear-gradient(90deg, rgba(6,182,212,0.08), rgba(99,102,241,0.04));border:1px solid rgba(6,182,212,0.12);padding:14px;border-radius:10px;color:#cff7fb}
+    .cta{display:flex;gap:10px;margin-top:18px}
+    .btn{padding:10px 14px;border-radius:10px;border:0;font-weight:600;cursor:pointer}
+    .btn-primary{background:var(--accent);color:#052024}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:inherit}
+    .small{font-size:13px;color:var(--muted)}
+    .hero-img{display:block;width:100%;max-width:300px;margin-left:auto}
+    footer{margin-top:16px;font-size:13px;color:var(--muted)}
+    .logo{display:flex;align-items:center;gap:10px}
+    .logo-mark{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#06b6d4,#6366f1);display:flex;align-items:center;justify-content:center;font-weight:700;color:#04202a}
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <section>
+      <div class="logo" aria-hidden>
+        <div class="logo-mark">S</div>
+        <div>
+          <div style="font-weight:700">SORTECH</div>
+          <div class="small">Sorteos — Información</div>
+        </div>
+      </div>
+
+      <h1>El sitio ha sido cerrado — Gracias por su apoyo</h1>
+      <p class="small">Lamentamos informar que SORTECH ha cerrado sus operaciones. Agradecemos profundamente la confianza y apoyo brindado por toda la comunidad.</p>
+
+      <div class="notice" role="status" aria-live="polite">
+        <strong>Importante:</strong> Todos los fondos recaudados fueron reembolsados por el anfitrión de <strong>SORTECH</strong>. Si usted pagó y aún no recibe la devolución, por favor contacte al anfitrión.
+      </div>
+
+      <p class="small" style="margin-top:14px">Si necesita una confirmación por escrito del reembolso, escriba a: 0981279614 También puede guardar este comprobante como constancia.</p>
+
+      <footer>
+        <div>Gracias por su comprensión. — Equipo SORTECH</div>
+      </footer>
+    </section>
+
+    <aside class="hero-img" aria-hidden="true">
+      <svg width="300" height="260" viewBox="0 0 300 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="260" rx="18" fill="url(#g)" />
+        <g opacity="0.98" fill="#fff">
+          <path d="M80 70h140v12H80z" opacity="0.12"/>
+          <path d="M80 100h140v12H80z" opacity="0.08"/>
+        </g>
+        <g transform="translate(36,40)" fill="#fff" opacity="0.98">
+          <circle cx="72" cy="72" r="48" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.06)"/>
+          <path d="M72 56a16 16 0 1 1 0 32 16 16 0 0 1 0-32z" fill="rgba(255,255,255,0.9)"/>
+        </g>
+        <defs>
+          <linearGradient id="g" x1="0" x2="300" y1="0" y2="260"><stop offset="0" stop-color="#071022"/><stop offset="1" stop-color="#071827"/></linearGradient>
+        </defs>
+      </svg>
+    </aside>
+  </main>
+
+</body>
+</html>
